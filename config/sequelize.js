@@ -1,16 +1,19 @@
 require('dotenv').config()
 
+// Determine if we're using local or network database
+const isLocalDB = process.env.DB_LOCAL === 'true'
+
 const config = {
   development: {
-    username: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_NAME || 'apoteka24',
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
+    username: isLocalDB ? (process.env.DB_LOCAL_USER || 'postgres') : process.env.DB_NETWORK_USER,
+    password: isLocalDB ? (process.env.DB_LOCAL_PASSWORD || 'password') : process.env.DB_NETWORK_PASSWORD,
+    database: isLocalDB ? (process.env.DB_LOCAL_NAME || 'apoteka24') : process.env.DB_NETWORK_NAME,
+    host: isLocalDB ? (process.env.DB_LOCAL_HOST || 'localhost') : process.env.DB_NETWORK_HOST,
+    port: isLocalDB ? (parseInt(process.env.DB_LOCAL_PORT) || 5432) : (parseInt(process.env.DB_NETWORK_PORT) || 5432),
     dialect: 'postgres',
     logging: console.log,
     dialectOptions: {
-      ssl: false
+      ssl: isLocalDB ? false : { rejectUnauthorized: false }
     },
     pool: {
       max: 20,
