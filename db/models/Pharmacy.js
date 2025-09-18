@@ -100,13 +100,18 @@ module.exports = (sequelize, DataTypes) => {
     static async findNearby(lat, lng, radiusKm = 10, limit = 20) {
       // Using Haversine formula for distance calculation with proper parameterization
       const query = `
-        SELECT *, ( 6371 * acos( cos( radians(:lat) ) * cos( radians( lat ) )
+        SELECT *,
+        ( 6371 * acos( cos( radians(:lat) ) * cos( radians( lat ) )
           * cos( radians( lng ) - radians(:lng) ) + sin( radians(:lat) )
           * sin( radians( lat ) ) ) ) AS distance
         FROM pharmacies
         WHERE active = true
-        HAVING distance < :radius
-        ORDER BY distance
+          AND ( 6371 * acos( cos( radians(:lat) ) * cos( radians( lat ) )
+            * cos( radians( lng ) - radians(:lng) ) + sin( radians(:lat) )
+            * sin( radians( lat ) ) ) ) < :radius
+        ORDER BY ( 6371 * acos( cos( radians(:lat) ) * cos( radians( lat ) )
+            * cos( radians( lng ) - radians(:lng) ) + sin( radians(:lat) )
+            * sin( radians( lat ) ) ) )
         LIMIT :limit
       `;
 
@@ -177,6 +182,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         min: -90,
         max: 90
+      },
+      get() {
+        const value = this.getDataValue('lat')
+        return value !== null && value !== undefined ? parseFloat(value) : null
       }
     },
     lng: {
@@ -185,6 +194,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         min: -180,
         max: 180
+      },
+      get() {
+        const value = this.getDataValue('lng')
+        return value !== null && value !== undefined ? parseFloat(value) : null
       }
     },
     is_24h: {

@@ -82,8 +82,7 @@ const getMedicineById = async (req, res) => {
 
 const searchMedicines = async (req, res) => {
   try {
-    const { name } = req.params
-    const { cityId, page = 1, limit = config.pagination.defaultLimit } = req.query
+    const { q: searchTerm, cityId, page = 1, limit = config.pagination.defaultLimit } = req.query
 
     const filters = {
       limit: Math.min(parseInt(limit), config.pagination.maxLimit),
@@ -99,8 +98,8 @@ const searchMedicines = async (req, res) => {
       where: {
         active: true,
         [Op.or]: [
-          { name_me: { [Op.iLike]: `%${name}%` } },
-          { name_en: { [Op.iLike]: `%${name}%` } }
+          { name_me: { [Op.iLike]: `%${searchTerm}%` } },
+          { name_en: { [Op.iLike]: `%${searchTerm}%` } }
         ]
       },
       include: [{

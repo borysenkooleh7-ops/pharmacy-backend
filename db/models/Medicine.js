@@ -12,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'pharmacy_id',
         as: 'pharmacies'
       });
+
+      // Medicine has many PharmacyMedicine entries
+      Medicine.hasMany(models.PharmacyMedicine, {
+        foreignKey: 'medicine_id',
+        as: 'pharmacyMedicines'
+      });
     }
 
     // Instance methods

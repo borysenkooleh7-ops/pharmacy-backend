@@ -7,7 +7,7 @@ const router = express.Router()
 
 // Public routes
 router.get('/', validatePagination, getAllMedicines)
-router.get('/search/:name', validatePagination, searchMedicines)
+router.get('/search', validatePagination, searchMedicines)
 router.get('/:id', getMedicineById)
 
 // Admin only routes
