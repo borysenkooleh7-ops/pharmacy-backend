@@ -32,6 +32,9 @@ pids
 *.seed
 *.pid.lock
 
+Dockerfile
+.dockerignore
+
 # Coverage directory used by tools like istanbul
 coverage/
 
