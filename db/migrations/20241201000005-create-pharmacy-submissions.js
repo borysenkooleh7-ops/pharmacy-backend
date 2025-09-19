@@ -10,9 +10,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      name_me: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      name_en: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       address: {
         type: Sequelize.STRING,
@@ -22,6 +26,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      city_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'cities',
+          key: 'id'
+        },
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE'
+      },
       phone: {
         type: Sequelize.STRING,
         allowNull: true
@@ -29,6 +43,11 @@ module.exports = {
       website: {
         type: Sequelize.STRING,
         allowNull: true
+      },
+      active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
       is_24h: {
         type: Sequelize.BOOLEAN,
@@ -40,13 +59,28 @@ module.exports = {
         allowNull: false,
         defaultValue: false
       },
+      hours_monfri: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: '08:00 - 20:00'
+      },
+      hours_sat: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: '09:00 - 17:00'
+      },
+      hours_sun: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'Closed'
+      },
       lat: {
         type: Sequelize.DECIMAL(9, 6),
-        allowNull: true
+        allowNull: false
       },
       lng: {
         type: Sequelize.DECIMAL(9, 6),
-        allowNull: true
+        allowNull: false
       },
       email: {
         type: Sequelize.STRING,
@@ -80,11 +114,14 @@ module.exports = {
     // Add indexes
     await queryInterface.addIndex('pharmacy_submissions', ['status']);
     await queryInterface.addIndex('pharmacy_submissions', ['city_slug']);
+    await queryInterface.addIndex('pharmacy_submissions', ['city_id']);
+    await queryInterface.addIndex('pharmacy_submissions', ['lat', 'lng']);
+    await queryInterface.addIndex('pharmacy_submissions', ['active']);
     await queryInterface.addIndex('pharmacy_submissions', ['created_at']);
     await queryInterface.addIndex('pharmacy_submissions', ['email']);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('pharmacy_submissions');
   }
 };

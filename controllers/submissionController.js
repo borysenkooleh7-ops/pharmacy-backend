@@ -6,8 +6,8 @@ const createSubmission = async (req, res) => {
   try {
     const submissionData = req.body
 
-    // Validate required fields
-    const requiredFields = ['name', 'address', 'city_slug', 'email']
+    // Validate required fields (updated to match new schema)
+    const requiredFields = ['name_me', 'address', 'city_slug', 'email', 'lat', 'lng', 'hours_monfri', 'hours_sat', 'hours_sun']
     const missingFields = requiredFields.filter(field => !submissionData[field])
 
     if (missingFields.length > 0) {
@@ -22,24 +22,23 @@ const createSubmission = async (req, res) => {
       return res.status(400).json(createErrorResponse('Invalid email format'))
     }
 
-    // Validate city exists
+    // Validate city exists and get city_id
     const city = await City.findBySlug(submissionData.city_slug)
     if (!city) {
       return res.status(400).json(createErrorResponse('Invalid city slug'))
     }
+    submissionData.city_id = city.id
 
-    // Validate coordinates if provided
-    if (submissionData.lat !== undefined && submissionData.lng !== undefined) {
-      const lat = parseFloat(submissionData.lat)
-      const lng = parseFloat(submissionData.lng)
+    // Validate and convert coordinates (now required)
+    const lat = parseFloat(submissionData.lat)
+    const lng = parseFloat(submissionData.lng)
 
-      if (isNaN(lat) || isNaN(lng)) {
-        return res.status(400).json(createErrorResponse('Invalid coordinates'))
-      }
-
-      submissionData.lat = lat
-      submissionData.lng = lng
+    if (isNaN(lat) || isNaN(lng)) {
+      return res.status(400).json(createErrorResponse('Invalid coordinates'))
     }
+
+    submissionData.lat = lat
+    submissionData.lng = lng
 
     const submission = await PharmacySubmission.create(submissionData)
     res.status(201).json(createResponse(submission, 'Pharmacy submission created successfully'))
@@ -128,24 +127,24 @@ const updateSubmissionStatus = async (req, res) => {
     if (status === 'approved' && pharmacy_data) {
       try {
         // Get city ID from slug
-        const city = await City.findBySlug(existingSubmission.city_slug)
-        if (!city) {
+        const submissionCity = await City.findBySlug(existingSubmission.city_slug)
+        if (!submissionCity) {
           return res.status(400).json(createErrorResponse('Invalid city for submission'))
         }
 
         // Create pharmacy from submission data and provided pharmacy_data
         const pharmacyToCreate = {
-          city_id: city.id,
-          name_me: pharmacy_data.name_me || existingSubmission.name,
-          name_en: pharmacy_data.name_en || existingSubmission.name,
+          city_id: existingSubmission.city_id || submissionCity.id,
+          name_me: existingSubmission.name_me,
+          name_en: existingSubmission.name_en || pharmacy_data?.name_en,
           address: existingSubmission.address,
-          lat: existingSubmission.lat || pharmacy_data.lat,
-          lng: existingSubmission.lng || pharmacy_data.lng,
+          lat: existingSubmission.lat,
+          lng: existingSubmission.lng,
           is_24h: existingSubmission.is_24h || false,
           open_sunday: existingSubmission.open_sunday || false,
-          hours_monfri: pharmacy_data.hours_monfri || '08:00–20:00',
-          hours_sat: pharmacy_data.hours_sat || '09:00–17:00',
-          hours_sun: pharmacy_data.hours_sun || 'Zatvoreno',
+          hours_monfri: existingSubmission.hours_monfri,
+          hours_sat: existingSubmission.hours_sat,
+          hours_sun: existingSubmission.hours_sun,
           phone: existingSubmission.phone,
           website: existingSubmission.website,
           active: true

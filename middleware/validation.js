@@ -41,10 +41,10 @@ function validatePagination(req, res, next) {
  */
 function validateSubmission(req, res, next) {
   try {
-    const { name, address, city_slug, email, phone, website, lat, lng } = req.body
+    const { name_me, name_en, address, city_slug, email, phone, website, lat, lng, hours_monfri, hours_sat, hours_sun } = req.body
 
-    // Check required fields
-    const requiredFields = ['name', 'address', 'city_slug', 'email']
+    // Check required fields (updated to match new schema)
+    const requiredFields = ['name_me', 'address', 'city_slug', 'email', 'lat', 'lng', 'hours_monfri', 'hours_sat', 'hours_sun']
     const missingFields = validateRequiredFields(req.body, requiredFields)
 
     if (missingFields.length > 0) {
@@ -58,15 +58,30 @@ function validateSubmission(req, res, next) {
       return res.status(400).json(createErrorResponse('Invalid email format'))
     }
 
-    // Validate coordinates if provided
-    if ((lat !== undefined || lng !== undefined)) {
-      if (lat === undefined || lng === undefined) {
-        return res.status(400).json(createErrorResponse('Both latitude and longitude must be provided'))
+    // Validate coordinates (now required)
+    if (!validateCoordinates(lat, lng)) {
+      return res.status(400).json(createErrorResponse(
+        'Invalid coordinates. Latitude must be between -90 and 90, longitude between -180 and 180'
+      ))
+    }
+
+    // Validate hours format
+    const hourFields = [hours_monfri, hours_sat, hours_sun]
+    const hourFieldNames = ['hours_monfri', 'hours_sat', 'hours_sun']
+
+    for (let i = 0; i < hourFields.length; i++) {
+      const hours = hourFields[i]
+      const fieldName = hourFieldNames[i]
+
+      if (!hours || hours.trim() === '') {
+        return res.status(400).json(createErrorResponse(`${fieldName} is required`))
       }
 
-      if (!validateCoordinates(lat, lng)) {
+      // Basic format validation - should be either "Closed" or time format
+      const timeFormatRegex = /^(\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}|Closed|closed|CLOSED)$/i
+      if (!timeFormatRegex.test(hours.trim())) {
         return res.status(400).json(createErrorResponse(
-          'Invalid coordinates. Latitude must be between -90 and 90, longitude between -180 and 180'
+          `Invalid ${fieldName} format. Use "HH:MM - HH:MM" or "Closed"`
         ))
       }
     }

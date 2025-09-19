@@ -101,12 +101,19 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    name: {
+    name_me: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
         len: [1, 200]
+      }
+    },
+    name_en: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        len: [0, 200]
       }
     },
     address: {
@@ -150,7 +157,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     lat: {
       type: DataTypes.DECIMAL(9, 6),
-      allowNull: true,
+      allowNull: false,
       validate: {
         min: -90,
         max: 90
@@ -158,11 +165,31 @@ module.exports = (sequelize, DataTypes) => {
     },
     lng: {
       type: DataTypes.DECIMAL(9, 6),
-      allowNull: true,
+      allowNull: false,
       validate: {
         min: -180,
         max: 180
       }
+    },
+    hours_monfri: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '08:00 - 20:00'
+    },
+    hours_sat: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '09:00 - 17:00'
+    },
+    hours_sun: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'Closed'
+    },
+    active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     },
     email: {
       type: DataTypes.STRING,
