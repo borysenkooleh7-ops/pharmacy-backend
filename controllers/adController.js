@@ -1,12 +1,32 @@
 const { Ad } = require('../db/models')
-const { createResponse, createErrorResponse } = require('../utils/responseHelper')
+const { createResponse, createErrorResponse, createPaginatedResponse } = require('../utils/responseHelper')
+const config = require('../config')
 
 const getAllAds = async (req, res) => {
   try {
-    const ads = await Ad.findAll({
-      order: [['created_at', 'DESC']]
+    const {
+      page = 1,
+      limit = config.pagination.defaultLimit
+    } = req.query
+
+    const offset = (parseInt(page) - 1) * parseInt(limit)
+    const actualLimit = Math.min(parseInt(limit), config.pagination.maxLimit)
+
+    const { count, rows: ads } = await Ad.findAndCountAll({
+      order: [['created_at', 'DESC']],
+      limit: actualLimit,
+      offset: offset
     })
-    res.json(createResponse(ads, 'Ads retrieved successfully'))
+
+    const paginatedResponse = createPaginatedResponse(
+      ads,
+      count,
+      parseInt(page),
+      actualLimit,
+      'Ads retrieved successfully'
+    )
+
+    res.json(paginatedResponse)
   } catch (error) {
     console.error('Error fetching ads:', error)
     res.status(500).json(createErrorResponse('Failed to fetch ads', error.message))

@@ -193,30 +193,7 @@ module.exports = {
         click_count: 23,
         impression_count: 378
       },
-      {
-        name: 'Ortopedski proizvodi - Podrška i rehabilitacija',
-        image_url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=300&h=150&fit=crop&crop=center',
-        target_url: 'https://ortopedija.me',
-        active: true,
-        weight: 1,
-        start_date: new Date(),
-        end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-        click_count: 16,
-        impression_count: 234
-      },
-
       // Emergency & Special Services
-      {
-        name: 'Hitna dostava lijekova - 2h u Podgorici',
-        image_url: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=150&fit=crop&crop=center',
-        target_url: 'https://apoteka24.me/hitna-dostava',
-        active: true,
-        weight: 3,
-        start_date: new Date(),
-        end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-        click_count: 134,
-        impression_count: 2123
-      },
       {
         name: 'Dežurne apoteke - Uvijek dostupno',
         image_url: 'https://images.unsplash.com/photo-1576671081837-49000212a370?w=300&h=150&fit=crop&crop=center',
@@ -227,19 +204,6 @@ module.exports = {
         end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
         click_count: 189,
         impression_count: 2567
-      },
-
-      // Inactive/Expired Ads for Testing
-      {
-        name: 'Ljeto 2024 - Zaštita od sunca (ISTEKLA)',
-        image_url: 'https://images.unsplash.com/photo-1620916297067-48d20241aea4?w=300&h=150&fit=crop&crop=center',
-        target_url: 'https://apoteka24.me/ljeto-2024',
-        active: false,
-        weight: 2,
-        start_date: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months ago
-        end_date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 1 month ago
-        click_count: 456,
-        impression_count: 7890
       }
     ], {});
   },

@@ -1,6 +1,7 @@
 const express = require('express')
 const { getAllAds, getActiveAds, getAdById, createAd, updateAd, deleteAd } = require('../controllers/adController')
 const { adminAuthMiddleware } = require('../middleware/adminAuth')
+const { validatePagination } = require('../middleware/validation')
 
 const router = express.Router()
 
@@ -8,7 +9,7 @@ const router = express.Router()
 router.get('/', getActiveAds)
 
 // Admin only routes
-router.get('/all', adminAuthMiddleware, getAllAds)
+router.get('/all', adminAuthMiddleware, validatePagination, getAllAds)
 router.get('/:id', adminAuthMiddleware, getAdById)
 router.post('/', adminAuthMiddleware, createAd)
 router.put('/:id', adminAuthMiddleware, updateAd)
