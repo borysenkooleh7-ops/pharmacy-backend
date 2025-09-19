@@ -10,7 +10,7 @@ const config = {
   },
 
   cors: {
-    origin: process.env.CORS_ORIGIN || '*',
+    origin: [process.env.CORS_ORIGIN || 'https://radiant-pothos-da792d.netlify.app/'],
     credentials: true,
   },
 
