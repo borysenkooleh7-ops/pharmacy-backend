@@ -7,7 +7,7 @@ module.exports = {
       // Major Pharmacy Chains
       {
         name: 'Montefarm - Najveća mreža apoteka u Crnoj Gori',
-        image_url: 'https://via.placeholder.com/300x150/0066cc/ffffff?text=Montefarm+Apoteke',
+        image_url: 'https://images.unsplash.com/photo-1576671081837-49000212a370?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://montefarm.co.me',
         active: true,
         weight: 5,
@@ -18,7 +18,7 @@ module.exports = {
       },
       {
         name: 'BENU Apoteke - Europski standard u Crnoj Gori',
-        image_url: 'https://via.placeholder.com/300x150/00a651/ffffff?text=BENU+Apoteke',
+        image_url: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://benu.me',
         active: true,
         weight: 4,
@@ -29,7 +29,7 @@ module.exports = {
       },
       {
         name: 'Tea Medica - Vaša privatna zdravstvena ustanova',
-        image_url: 'https://via.placeholder.com/300x150/8e24aa/ffffff?text=Tea+Medica',
+        image_url: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://teamedica.me',
         active: true,
         weight: 3,
@@ -40,7 +40,7 @@ module.exports = {
       },
       {
         name: 'Apoteke Maxima - Lokacije u Podgorici i primorju',
-        image_url: 'https://via.placeholder.com/300x150/ff5722/ffffff?text=Apoteke+Maxima',
+        image_url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://www.apotekemaxima.me',
         active: true,
         weight: 2,
@@ -53,7 +53,7 @@ module.exports = {
       // Health & Medical Services
       {
         name: 'Hipokrat Poliklinike - Kompleksna medicinska dijagnostika',
-        image_url: 'https://via.placeholder.com/300x150/1976d2/ffffff?text=Hipokrat+Poliklinike',
+        image_url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://hipokrat.me',
         active: true,
         weight: 3,
@@ -64,7 +64,7 @@ module.exports = {
       },
       {
         name: 'Meditas - Medicinska oprema i usluge',
-        image_url: 'https://via.placeholder.com/300x150/388e3c/ffffff?text=Meditas+Medical',
+        image_url: 'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://www.meditas.me',
         active: true,
         weight: 2,
@@ -77,7 +77,7 @@ module.exports = {
       // Online Pharmacy Services
       {
         name: 'eApoteka.ME - Online naručivanje lijekova',
-        image_url: 'https://via.placeholder.com/300x150/607d8b/ffffff?text=eApoteka.ME',
+        image_url: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://www.eapoteka.me',
         active: true,
         weight: 4,
@@ -90,7 +90,7 @@ module.exports = {
       // Health & Beauty Products
       {
         name: 'Drogerija Dama - Njega, ljepota i zdravlje',
-        image_url: 'https://via.placeholder.com/300x150/e91e63/ffffff?text=Drogerija+Dama',
+        image_url: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://dama.me',
         active: true,
         weight: 2,
@@ -101,7 +101,7 @@ module.exports = {
       },
       {
         name: 'Ukus Zdravlja - Prirodni proizvodi i suplementi',
-        image_url: 'https://via.placeholder.com/300x150/4caf50/ffffff?text=Ukus+Zdravlja',
+        image_url: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://www.ukuszdravlja.me',
         active: true,
         weight: 2,
@@ -114,7 +114,7 @@ module.exports = {
       // Generic Health Services
       {
         name: 'Farmacia Online - Najbolje cijene u Crnoj Gori',
-        image_url: 'https://via.placeholder.com/300x150/8168f0/ffffff?text=Farmacia+Online',
+        image_url: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://farmacia.me',
         active: true,
         weight: 3,
@@ -125,7 +125,7 @@ module.exports = {
       },
       {
         name: 'Zdravlje Plus - Dostava lijekova na kućnu adresu',
-        image_url: 'https://via.placeholder.com/300x150/31c2a7/ffffff?text=Zdravlje+Plus',
+        image_url: 'https://images.unsplash.com/photo-1563213126-a4273aed2016?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://zdravlje-plus.me',
         active: true,
         weight: 2,
@@ -136,7 +136,7 @@ module.exports = {
       },
       {
         name: 'MediCare Montenegro - 24/7 medicinska pomoć',
-        image_url: 'https://via.placeholder.com/300x150/f08c1a/ffffff?text=MediCare+24%2F7',
+        image_url: 'https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://medicare.me',
         active: true,
         weight: 1,
@@ -149,7 +149,7 @@ module.exports = {
       // Seasonal/Special Promotions
       {
         name: 'Zimska promocija - Vitamini i imunitet',
-        image_url: 'https://via.placeholder.com/300x150/2196f3/ffffff?text=Zimska+Promocija',
+        image_url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://apoteka24.me/promocije/zima',
         active: true,
         weight: 4,
@@ -160,7 +160,7 @@ module.exports = {
       },
       {
         name: 'Besplatna dostava za narudžbe preko 50€',
-        image_url: 'https://via.placeholder.com/300x150/ff9800/ffffff?text=Besplatna+Dostava',
+        image_url: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://apoteka24.me/dostava',
         active: true,
         weight: 3,
@@ -171,7 +171,7 @@ module.exports = {
       },
       {
         name: 'Rezervišite lijek online - garantovana dostupnost',
-        image_url: 'https://via.placeholder.com/300x150/9c27b0/ffffff?text=Rezervacija+Online',
+        image_url: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://apoteka24.me/rezervacija',
         active: true,
         weight: 2,
@@ -184,7 +184,7 @@ module.exports = {
       // Medical Equipment & Devices
       {
         name: 'Medicinska oprema - Kućni monitoring',
-        image_url: 'https://via.placeholder.com/300x150/795548/ffffff?text=Med+Oprema',
+        image_url: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://medicinska-oprema.me',
         active: true,
         weight: 1,
@@ -195,7 +195,7 @@ module.exports = {
       },
       {
         name: 'Ortopedski proizvodi - Podrška i rehabilitacija',
-        image_url: 'https://via.placeholder.com/300x150/607d8b/ffffff?text=Ortopedija',
+        image_url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://ortopedija.me',
         active: true,
         weight: 1,
@@ -208,7 +208,7 @@ module.exports = {
       // Emergency & Special Services
       {
         name: 'Hitna dostava lijekova - 2h u Podgorici',
-        image_url: 'https://via.placeholder.com/300x150/f44336/ffffff?text=Hitna+Dostava',
+        image_url: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://apoteka24.me/hitna-dostava',
         active: true,
         weight: 3,
@@ -219,7 +219,7 @@ module.exports = {
       },
       {
         name: 'Dežurne apoteke - Uvijek dostupno',
-        image_url: 'https://via.placeholder.com/300x150/3f51b5/ffffff?text=Dezurne+Apoteke',
+        image_url: 'https://images.unsplash.com/photo-1576671081837-49000212a370?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://apoteka24.me/dezurne',
         active: true,
         weight: 4,
@@ -232,7 +232,7 @@ module.exports = {
       // Inactive/Expired Ads for Testing
       {
         name: 'Ljeto 2024 - Zaštita od sunca (ISTEKLA)',
-        image_url: 'https://via.placeholder.com/300x150/ffeb3b/333333?text=Ljeto+2024',
+        image_url: 'https://images.unsplash.com/photo-1620916297067-48d20241aea4?w=300&h=150&fit=crop&crop=center',
         target_url: 'https://apoteka24.me/ljeto-2024',
         active: false,
         weight: 2,
