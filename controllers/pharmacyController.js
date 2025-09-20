@@ -86,6 +86,11 @@ const createPharmacy = async (req, res) => {
   try {
     const pharmacyData = req.body
 
+    // Convert empty website string to null for URL validation
+    if (pharmacyData.website !== undefined && pharmacyData.website.trim() === '') {
+      pharmacyData.website = null
+    }
+
     // Validate required fields
     const requiredFields = ['city_id', 'name_me', 'address', 'lat', 'lng', 'hours_monfri', 'hours_sat', 'hours_sun']
     const missingFields = requiredFields.filter(field => !pharmacyData[field])
@@ -125,6 +130,11 @@ const updatePharmacy = async (req, res) => {
     const existingPharmacy = await Pharmacy.findByPk(id)
     if (!existingPharmacy) {
       return res.status(404).json(createErrorResponse('Pharmacy not found'))
+    }
+
+    // Convert empty website string to null for URL validation
+    if (updateData.website !== undefined && updateData.website.trim() === '') {
+      updateData.website = null
     }
 
     // Validate coordinates if provided

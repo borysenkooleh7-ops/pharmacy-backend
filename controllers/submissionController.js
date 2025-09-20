@@ -116,8 +116,8 @@ const updateSubmissionStatus = async (req, res) => {
           hours_monfri: existingSubmission.hours_monfri,
           hours_sat: existingSubmission.hours_sat,
           hours_sun: existingSubmission.hours_sun,
-          phone: existingSubmission.phone,
-          website: existingSubmission.website,
+          phone: existingSubmission.phone || null,
+          website: existingSubmission.website && existingSubmission.website.trim() !== '' ? existingSubmission.website : null, // Convert empty string to null for URL validation
           active: true
         }
 
