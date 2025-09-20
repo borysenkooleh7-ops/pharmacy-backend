@@ -12,7 +12,7 @@ module.exports = {
       },
       name_me: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       name_en: {
         type: Sequelize.STRING,
@@ -20,11 +20,11 @@ module.exports = {
       },
       address: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       city_slug: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       city_id: {
         type: Sequelize.INTEGER,
@@ -61,30 +61,30 @@ module.exports = {
       },
       hours_monfri: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         defaultValue: '08:00 - 20:00'
       },
       hours_sat: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         defaultValue: '09:00 - 17:00'
       },
       hours_sun: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         defaultValue: 'Closed'
       },
       lat: {
         type: Sequelize.DECIMAL(9, 6),
-        allowNull: false
+        allowNull: true
       },
       lng: {
         type: Sequelize.DECIMAL(9, 6),
-        allowNull: false
+        allowNull: true
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       notes: {
         type: Sequelize.TEXT,

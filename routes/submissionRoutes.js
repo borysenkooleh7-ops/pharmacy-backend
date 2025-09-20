@@ -6,7 +6,7 @@ const { validateSubmission, validatePagination } = require('../middleware/valida
 const router = express.Router()
 
 // Public routes
-router.post('/', validateSubmission, createSubmission)
+router.post('/', createSubmission)
 
 // Admin only routes
 router.get('/', adminAuthMiddleware, validatePagination, getAllSubmissions)

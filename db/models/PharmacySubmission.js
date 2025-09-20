@@ -103,47 +103,27 @@ module.exports = (sequelize, DataTypes) => {
     },
     name_me: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [1, 200]
-      }
+      allowNull: true
     },
     name_en: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        len: [0, 200]
-      }
+      allowNull: true
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [1, 300]
-      }
+      allowNull: true
     },
     city_slug: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      allowNull: true
     },
     phone: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        len: [0, 20]
-      }
+      allowNull: true
     },
     website: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        isUrl: true
-      }
+      allowNull: true
     },
     is_24h: {
       type: DataTypes.BOOLEAN,
@@ -157,33 +137,25 @@ module.exports = (sequelize, DataTypes) => {
     },
     lat: {
       type: DataTypes.DECIMAL(9, 6),
-      allowNull: false,
-      validate: {
-        min: -90,
-        max: 90
-      }
+      allowNull: true
     },
     lng: {
       type: DataTypes.DECIMAL(9, 6),
-      allowNull: false,
-      validate: {
-        min: -180,
-        max: 180
-      }
+      allowNull: true
     },
     hours_monfri: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: '08:00 - 20:00'
     },
     hours_sat: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: '09:00 - 17:00'
     },
     hours_sun: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: 'Closed'
     },
     active: {
@@ -193,11 +165,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        isEmail: true
-      }
+      allowNull: true
     },
     notes: {
       type: DataTypes.TEXT,
