@@ -15,12 +15,17 @@ const getAllPharmacies = async (req, res) => {
 
     // Remove nearby search from general endpoint - use dedicated /nearby endpoint instead
 
+    // Check if this is an admin request (has x-admin-key header)
+    const isAdminRequest = !!req.headers['x-admin-key']
+
     // Handle regular filtered search
     const filters = {
       cityId: cityId ? parseInt(cityId) : null,
       is24h,
       openSunday,
       search,
+      // For admin requests, sort by most recent (updated_at DESC)
+      sortBy: isAdminRequest ? 'recent' : null,
       limit: Math.min(parseInt(limit), config.pagination.maxLimit),
       offset: (parseInt(page) - 1) * parseInt(limit)
     }

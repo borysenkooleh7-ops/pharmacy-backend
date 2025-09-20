@@ -65,35 +65,6 @@ function validateSubmission(req, res, next) {
       ))
     }
 
-    // Validate hours format
-    const hourFields = [hours_monfri, hours_sat, hours_sun]
-    const hourFieldNames = ['hours_monfri', 'hours_sat', 'hours_sun']
-
-    for (let i = 0; i < hourFields.length; i++) {
-      const hours = hourFields[i]
-      const fieldName = hourFieldNames[i]
-
-      if (!hours || hours.trim() === '') {
-        return res.status(400).json(createErrorResponse(`${fieldName} is required`))
-      }
-
-      // Basic format validation - should be either "Closed" or time format
-      const timeFormatRegex = /^(\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}|Closed|closed|CLOSED)$/i
-      if (!timeFormatRegex.test(hours.trim())) {
-        return res.status(400).json(createErrorResponse(
-          `Invalid ${fieldName} format. Use "HH:MM - HH:MM" or "Closed"`
-        ))
-      }
-    }
-
-    // Validate phone format if provided
-    if (phone !== undefined && phone.trim() !== '') {
-      const phoneRegex = /^[\+]?[\d\s\-\(\)]+$/
-      if (!phoneRegex.test(phone)) {
-        return res.status(400).json(createErrorResponse('Invalid phone number format'))
-      }
-    }
-
     // Validate website URL if provided
     if (website !== undefined && website.trim() !== '') {
       try {
@@ -101,14 +72,6 @@ function validateSubmission(req, res, next) {
       } catch (urlError) {
         return res.status(400).json(createErrorResponse('Invalid website URL format'))
       }
-    }
-
-    // Validate city slug format
-    const slugRegex = /^[a-z0-9-]+$/
-    if (!slugRegex.test(city_slug)) {
-      return res.status(400).json(createErrorResponse(
-        'Invalid city slug format. Only lowercase letters, numbers, and hyphens allowed'
-      ))
     }
 
     next()

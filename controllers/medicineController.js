@@ -25,9 +25,17 @@ const getAllMedicines = async (req, res) => {
       }
     }
 
+    // Check if this is an admin request (has x-admin-key header)
+    const isAdminRequest = !!req.headers['x-admin-key']
+
+    // Determine sorting order - admin operations show most recent first
+    const orderBy = isAdminRequest ?
+      [['updated_at', 'DESC']] :
+      [['name_me', 'ASC']]
+
     const result = await Medicine.findAndCountAll({
       where: whereClause,
-      order: [['name_me', 'ASC']],
+      order: orderBy,
       limit: filters.limit,
       offset: filters.offset
     })

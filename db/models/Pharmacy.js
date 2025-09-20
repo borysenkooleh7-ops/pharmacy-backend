@@ -80,10 +80,15 @@ module.exports = (sequelize, DataTypes) => {
         ];
       }
 
+      // Determine sorting order - admin operations show most recent first
+      const orderBy = filters.sortBy === 'recent' ?
+        [['updated_at', 'DESC']] :
+        [['name_me', 'ASC']];
+
       const options = {
         where,
         include,
-        order: [['name_me', 'ASC']]
+        order: orderBy
       };
 
       // Pagination
