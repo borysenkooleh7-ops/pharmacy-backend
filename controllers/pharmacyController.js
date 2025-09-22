@@ -10,7 +10,8 @@ const getAllPharmacies = async (req, res) => {
       openSunday,
       search,
       page = 1,
-      limit = config.pagination.defaultLimit
+      limit = config.pagination.defaultLimit,
+      unlimited = false
     } = req.query
 
     // Remove nearby search from general endpoint - use dedicated /nearby endpoint instead
@@ -19,6 +20,9 @@ const getAllPharmacies = async (req, res) => {
     const isAdminRequest = !!req.headers['x-admin-key']
 
     // Handle regular filtered search
+    const isUnlimited = unlimited === 'true' || unlimited === true
+    const actualLimit = isUnlimited ? null : Math.min(parseInt(limit), config.pagination.maxLimit)
+
     const filters = {
       cityId: cityId ? parseInt(cityId) : null,
       is24h,
@@ -26,8 +30,8 @@ const getAllPharmacies = async (req, res) => {
       search,
       // For admin requests, sort by most recent (updated_at DESC)
       sortBy: isAdminRequest ? 'recent' : null,
-      limit: Math.min(parseInt(limit), config.pagination.maxLimit),
-      offset: (parseInt(page) - 1) * parseInt(limit)
+      limit: actualLimit,
+      offset: isUnlimited ? null : (parseInt(page) - 1) * parseInt(limit)
     }
 
     const result = await Pharmacy.findWithFilters(filters)
