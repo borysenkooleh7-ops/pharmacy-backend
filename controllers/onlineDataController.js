@@ -209,6 +209,8 @@ const syncCityPharmacyData = async (req, res) => {
 
     // Get or create the city in database to ensure we have the correct database ID
     let city = await City.findOne({ where: { slug: citySlug } })
+    console.log(city);
+    
     if (!city) {
       // Create city in database if it doesn't exist
       city = await City.create({

@@ -75,6 +75,15 @@ module.exports = {
         allowNull: false,
         defaultValue: true
       },
+      google_place_id: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        unique: true
+      },
+      google_rating: {
+        type: Sequelize.DECIMAL(2, 1),
+        allowNull: true
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -92,6 +101,7 @@ module.exports = {
     await queryInterface.addIndex('pharmacies', ['is_24h']);
     await queryInterface.addIndex('pharmacies', ['open_sunday']);
     await queryInterface.addIndex('pharmacies', ['active']);
+    await queryInterface.addIndex('pharmacies', ['google_place_id']);
 
     // Add composite index for location-based queries
     await queryInterface.addIndex('pharmacies', ['lat', 'lng']);

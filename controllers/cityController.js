@@ -4,7 +4,18 @@ const { getAllCities: getStaticCities, getCityById: getStaticCityById, getCityBy
 
 const getAllCities = async (req, res) => {
   try {
-    const cities = getStaticCities()
+    // Return database cities to ensure IDs match what pharmacies use
+    const cities = await City.findAll({
+      order: [['name_me', 'ASC']]
+    })
+
+    // If no cities in database, return static cities (for initial setup)
+    if (cities.length === 0) {
+      const staticCities = getStaticCities()
+      res.json(createResponse(staticCities, 'Static cities retrieved successfully'))
+      return
+    }
+
     res.json(createResponse(cities, 'Cities retrieved successfully'))
   } catch (error) {
     console.error('Error fetching cities:', error)
@@ -15,7 +26,14 @@ const getAllCities = async (req, res) => {
 const getCityById = async (req, res) => {
   try {
     const { id } = req.params
-    const city = getStaticCityById(parseInt(id))
+
+    // First try to find in database
+    let city = await City.findByPk(parseInt(id))
+
+    // If not in database, try static cities as fallback
+    if (!city) {
+      city = getStaticCityById(parseInt(id))
+    }
 
     if (!city) {
       return res.status(404).json(createErrorResponse('City not found'))
@@ -31,7 +49,14 @@ const getCityById = async (req, res) => {
 const getCityBySlugRoute = async (req, res) => {
   try {
     const { slug } = req.params
-    const city = getCityBySlug(slug)
+
+    // First try to find in database
+    let city = await City.findOne({ where: { slug } })
+
+    // If not in database, try static cities as fallback
+    if (!city) {
+      city = getCityBySlug(slug)
+    }
 
     if (!city) {
       return res.status(404).json(createErrorResponse('City not found'))
