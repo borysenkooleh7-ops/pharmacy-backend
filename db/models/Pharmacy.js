@@ -254,6 +254,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true
+    },
+    google_place_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true
+    },
+    google_rating: {
+      type: DataTypes.DECIMAL(2, 1),
+      allowNull: true
     }
   }, {
     sequelize,

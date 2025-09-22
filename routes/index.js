@@ -4,6 +4,7 @@ const pharmacyRoutes = require('./pharmacyRoutes')
 const medicineRoutes = require('./medicineRoutes')
 const submissionRoutes = require('./submissionRoutes')
 const adRoutes = require('./adRoutes')
+const onlineDataRoutes = require('./onlineDataRoutes')
 
 const router = express.Router()
 
@@ -26,6 +27,7 @@ router.use('/pharmacies', pharmacyRoutes)
 router.use('/medicines', medicineRoutes)
 router.use('/pharmacy-submissions', submissionRoutes)
 router.use('/ads', adRoutes)
+router.use('/online-data', onlineDataRoutes)
 
 // API documentation route
 router.get('/docs', (req, res) => {
@@ -73,6 +75,11 @@ router.get('/docs', (req, res) => {
           'POST /api/ads': 'Create ad (admin)',
           'PUT /api/ads/:id': 'Update ad (admin)',
           'DELETE /api/ads/:id': 'Delete ad (admin)'
+        },
+        onlineData: {
+          'POST /api/online-data/sync-city': 'Sync pharmacy data for a specific city (admin)',
+          'GET /api/online-data/cities': 'Get all cities available for syncing (admin)',
+          'GET /api/online-data/status': 'Get sync status and statistics (admin)'
         }
       },
       queryParameters: {

@@ -16,7 +16,7 @@ function adminAuth(req, res, next) {
       ))
     }
 
-    if (adminKey !== config.adminKey) {
+    if (adminKey !== config.admin.key) {
       return res.status(403).json(createErrorResponse(
         'Invalid admin credentials',
         'Invalid admin key provided'
@@ -40,7 +40,7 @@ function optionalAdminAuth(req, res, next) {
   try {
     const adminKey = req.headers['x-admin-key']
 
-    if (adminKey && adminKey === config.adminKey) {
+    if (adminKey && adminKey === config.admin.key) {
       req.isAdmin = true
     } else {
       req.isAdmin = false

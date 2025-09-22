@@ -1,11 +1,10 @@
 const { City } = require('../db/models')
 const { createResponse, createErrorResponse } = require('../utils/responseHelper')
+const { getAllCities: getStaticCities, getCityById: getStaticCityById, getCityBySlug } = require('../data/cities')
 
 const getAllCities = async (req, res) => {
   try {
-    const cities = await City.findAll({
-      order: [['name_me', 'ASC']]
-    })
+    const cities = getStaticCities()
     res.json(createResponse(cities, 'Cities retrieved successfully'))
   } catch (error) {
     console.error('Error fetching cities:', error)
@@ -16,7 +15,7 @@ const getAllCities = async (req, res) => {
 const getCityById = async (req, res) => {
   try {
     const { id } = req.params
-    const city = await City.findByPk(id)
+    const city = getStaticCityById(parseInt(id))
 
     if (!city) {
       return res.status(404).json(createErrorResponse('City not found'))
@@ -29,10 +28,10 @@ const getCityById = async (req, res) => {
   }
 }
 
-const getCityBySlug = async (req, res) => {
+const getCityBySlugRoute = async (req, res) => {
   try {
     const { slug } = req.params
-    const city = await City.findBySlug(slug)
+    const city = getCityBySlug(slug)
 
     if (!city) {
       return res.status(404).json(createErrorResponse('City not found'))
@@ -104,7 +103,7 @@ const deleteCity = async (req, res) => {
 module.exports = {
   getAllCities,
   getCityById,
-  getCityBySlug,
+  getCityBySlug: getCityBySlugRoute,
   createCity,
   updateCity,
   deleteCity
