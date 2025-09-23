@@ -28,8 +28,14 @@ const config = {
 
   // Pagination defaults
   pagination: {
-    defaultLimit: 20,
+    defaultLimit: parseInt(process.env.N_PHARMACIES) || 20,
     maxLimit: 100,
+  },
+
+  // Search configuration
+  search: {
+    radius: parseInt(process.env.SEARCH_RADIUS) || 2000,
+    nPharmacies: parseInt(process.env.N_PHARMACIES) || 20,
   },
 }
 

@@ -183,7 +183,7 @@ const getNearbyPharmacies = async (req, res) => {
   try {
     // Coordinates are already validated by validateCoordinateParams middleware
     const { lat, lng } = req.coordinates
-    const { radius = 10, limit = config.pagination.defaultLimit } = req.query
+    const { radius = config.search.radius, limit = config.search.nPharmacies } = req.query
 
     const pharmacies = await Pharmacy.findNearby(
       lat,
