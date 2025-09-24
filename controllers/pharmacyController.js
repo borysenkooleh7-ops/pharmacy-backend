@@ -14,6 +14,9 @@ const getAllPharmacies = async (req, res) => {
       unlimited = false
     } = req.query
 
+    // Get language from header or default to 'me'
+    const language = req.headers['x-language'] || 'me'
+
     // Remove nearby search from general endpoint - use dedicated /nearby endpoint instead
 
     // Check if this is an admin request (has x-admin-key header)
@@ -25,16 +28,24 @@ const getAllPharmacies = async (req, res) => {
 
     const filters = {
       cityId: cityId ? parseInt(cityId) : null,
-      is24h,
-      openSunday,
-      search,
+      is24h: is24h === 'true' || is24h === true,
+      openSunday: openSunday === 'true' || openSunday === true,
+      search: search && search.trim() !== '' ? search.trim() : null,
       // For admin requests, sort by most recent (updated_at DESC)
       sortBy: isAdminRequest ? 'recent' : null,
       limit: actualLimit,
       offset: isUnlimited ? null : (parseInt(page) - 1) * parseInt(limit)
     }
 
-    const result = await Pharmacy.findWithFilters(filters)
+    console.log(`🔍 Pharmacy filtering with params:`, {
+      cityId: filters.cityId,
+      is24h: filters.is24h,
+      openSunday: filters.openSunday,
+      search: filters.search,
+      language
+    })
+
+    const result = await Pharmacy.findWithFilters(filters, language)
     const pharmacies = result.rows || []
     const total = result.count || 0
 
@@ -185,11 +196,15 @@ const getNearbyPharmacies = async (req, res) => {
     const { lat, lng } = req.coordinates
     const { radius = config.search.radius, limit = config.search.nPharmacies } = req.query
 
+    // Get language from header or default to 'me'
+    const language = req.headers['x-language'] || 'me'
+
     const pharmacies = await Pharmacy.findNearby(
       lat,
       lng,
       parseFloat(radius),
-      Math.min(parseInt(limit), config.pagination.maxLimit)
+      Math.min(parseInt(limit), config.pagination.maxLimit),
+      language
     )
 
     res.json(createResponse(pharmacies, 'Nearby pharmacies retrieved successfully'))

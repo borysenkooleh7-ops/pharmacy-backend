@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     // Static methods
-    static async findWithFilters(filters = {}) {
+    static async findWithFilters(filters = {}, language = 'me') {
       const where = { active: true };
       const include = [{
         model: sequelize.models.City,
@@ -64,11 +64,11 @@ module.exports = (sequelize, DataTypes) => {
         where.city_id = filters.cityId;
       }
 
-      if (filters.is24h === 'true') {
+      if (filters.is24h === true) {
         where.is_24h = true;
       }
 
-      if (filters.openSunday === 'true') {
+      if (filters.openSunday === true) {
         where.open_sunday = true;
       }
 
@@ -99,10 +99,21 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
 
-      return await this.findAndCountAll(options);
+      const result = await this.findAndCountAll(options);
+
+      // Transform the rows to include display_name based on language
+      if (result.rows) {
+        result.rows = result.rows.map(pharmacy => {
+          const pharmacyData = pharmacy.toJSON();
+          pharmacyData.display_name = pharmacy.getDisplayName(language);
+          return pharmacyData;
+        });
+      }
+
+      return result;
     }
 
-    static async findNearby(lat, lng, radiusKm = 10, limit = 20) {
+    static async findNearby(lat, lng, radiusKm = 10, limit = 20, language = 'me') {
       // Using Haversine formula for distance calculation with proper parameterization
       const query = `
         SELECT *,
@@ -120,16 +131,23 @@ module.exports = (sequelize, DataTypes) => {
         LIMIT :limit
       `;
 
-      return await sequelize.query(query, {
+      const pharmacies = await sequelize.query(query, {
         replacements: { lat, lng, radius: radiusKm, limit },
         type: sequelize.QueryTypes.SELECT,
         model: this,
         mapToModel: true
       });
+
+      // Transform to include display_name based on language
+      return pharmacies.map(pharmacy => {
+        const pharmacyData = pharmacy.toJSON();
+        pharmacyData.display_name = pharmacy.getDisplayName(language);
+        return pharmacyData;
+      });
     }
 
-    static async findByCity(cityId) {
-      return await this.findAll({
+    static async findByCity(cityId, language = 'me') {
+      const pharmacies = await this.findAll({
         where: {
           city_id: cityId,
           active: true
@@ -140,6 +158,13 @@ module.exports = (sequelize, DataTypes) => {
           attributes: ['name_me', 'name_en', 'slug']
         }],
         order: [['name_me', 'ASC']]
+      });
+
+      // Transform to include display_name based on language
+      return pharmacies.map(pharmacy => {
+        const pharmacyData = pharmacy.toJSON();
+        pharmacyData.display_name = pharmacy.getDisplayName(language);
+        return pharmacyData;
       });
     }
   }

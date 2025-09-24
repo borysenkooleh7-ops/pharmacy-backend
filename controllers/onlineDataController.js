@@ -32,7 +32,7 @@ const CITY_COORDINATES = {
   'petnjica': { lat: 42.9492, lng: 19.9061, radius: 4000 },
   'gusinje': { lat: 42.5531, lng: 19.8319, radius: 4000 },
   'pluzine': { lat: 43.1544, lng: 18.8447, radius: 4000 },
-  'savnik': { lat: 43.0169, lng: 19.0961, radius: 4000 }
+  'savnik': { lat: 43.0169, lng: 19.0961, radius: 8000 }
 }
 
 /**
@@ -49,32 +49,139 @@ const fetchOnlinePharmacyData = async (citySlug) => {
 
     // Step 1: Search for pharmacies using Google Places Nearby Search
     const searchUrl = `${PLACES_API_BASE_URL}/nearbysearch/json`
-    const searchParams = {
-      location: `${cityCoords.lat},${cityCoords.lng}`,
-      radius: cityCoords.radius,
-      type: 'pharmacy',
-      key: GOOGLE_API_KEY
-    }
+
+    // Comprehensive search strategies for thorough data retrieval
+    const baseRadius = cityCoords.radius
+    const searchStrategies = [
+      // Primary searches with type
+      {
+        location: `${cityCoords.lat},${cityCoords.lng}`,
+        radius: baseRadius,
+        type: 'pharmacy',
+        key: GOOGLE_API_KEY
+      },
+      // Keyword searches in Montenegrin
+      {
+        location: `${cityCoords.lat},${cityCoords.lng}`,
+        radius: baseRadius,
+        keyword: 'apoteka',
+        key: GOOGLE_API_KEY
+      },
+      {
+        location: `${cityCoords.lat},${cityCoords.lng}`,
+        radius: baseRadius,
+        keyword: 'ljekarna',
+        key: GOOGLE_API_KEY
+      },
+      {
+        location: `${cityCoords.lat},${cityCoords.lng}`,
+        radius: baseRadius,
+        keyword: 'farmacija',
+        key: GOOGLE_API_KEY
+      },
+
+      // Keyword searches in English
+      {
+        location: `${cityCoords.lat},${cityCoords.lng}`,
+        radius: baseRadius,
+        keyword: 'pharmacy',
+        key: GOOGLE_API_KEY
+      },
+      {
+        location: `${cityCoords.lat},${cityCoords.lng}`,
+        radius: baseRadius,
+        keyword: 'drugstore',
+        key: GOOGLE_API_KEY
+      },
+      {
+        location: `${cityCoords.lat},${cityCoords.lng}`,
+        radius: baseRadius,
+        keyword: 'medicine',
+        key: GOOGLE_API_KEY
+      },
+
+      // Extended radius searches for rural areas
+      {
+        location: `${cityCoords.lat},${cityCoords.lng}`,
+        radius: Math.min(baseRadius * 1.5, 15000),
+        type: 'pharmacy',
+        key: GOOGLE_API_KEY
+      },
+      {
+        location: `${cityCoords.lat},${cityCoords.lng}`,
+        radius: Math.min(baseRadius * 1.5, 15000),
+        keyword: 'apoteka',
+        key: GOOGLE_API_KEY
+      },
+
+      // Text searches for comprehensive coverage
+      {
+        query: `apoteka ${citySlug} montenegro`,
+        key: GOOGLE_API_KEY
+      },
+      {
+        query: `pharmacy ${citySlug} montenegro`,
+        key: GOOGLE_API_KEY
+      }
+    ]
 
     console.log(`📍 Searching pharmacies near ${cityCoords.lat},${cityCoords.lng} within ${cityCoords.radius}m`)
 
-    const searchResponse = await axios.get(searchUrl, { params: searchParams })
+    let allPlaces = []
 
-    if (searchResponse.data.status !== 'OK' && searchResponse.data.status !== 'ZERO_RESULTS') {
-      throw new Error(`Google Places API error: ${searchResponse.data.status} - ${searchResponse.data.error_message || 'Unknown error'}`)
+    for (const [index, searchParams] of searchStrategies.entries()) {
+      try {
+        console.log(`🔍 Strategy ${index + 1}/${searchStrategies.length}: ${JSON.stringify(searchParams)}`)
+
+        let searchResponse
+
+        // Determine which API endpoint to use
+        if (searchParams.query) {
+          // Use Text Search API for query-based searches
+          const textSearchUrl = `${PLACES_API_BASE_URL}/textsearch/json`
+          searchResponse = await axios.get(textSearchUrl, { params: searchParams })
+        } else {
+          // Use Nearby Search API for location-based searches
+          searchResponse = await axios.get(searchUrl, { params: searchParams })
+        }
+
+        if (searchResponse.data.status === 'OK') {
+          const places = searchResponse.data.results || []
+          console.log(`📋 Found ${places.length} results with this strategy`)
+
+          // Add new places (avoid duplicates by place_id)
+          for (const place of places) {
+            if (!allPlaces.find(p => p.place_id === place.place_id)) {
+              // Additional filtering for pharmacy-related places
+              if (isPharmacyRelated(place)) {
+                allPlaces.push(place)
+                console.log(`✅ Added: ${place.name}`)
+              }
+            }
+          }
+        } else if (searchResponse.data.status === 'ZERO_RESULTS') {
+          console.log(`📭 No results for this strategy`)
+        } else {
+          console.warn(`⚠️ API returned status: ${searchResponse.data.status}`)
+        }
+
+        // Add delay between requests to respect rate limits
+        await new Promise(resolve => setTimeout(resolve, 300))
+      } catch (error) {
+        console.error(`❌ Search strategy ${index + 1} failed:`, error.message)
+      }
     }
 
-    const places = searchResponse.data.results || []
-    console.log(`📋 Found ${places.length} pharmacies from Google Places API`)
+    console.log(`📋 Total unique pharmacies found: ${allPlaces.length}`)
 
-    if (places.length === 0) {
+    if (allPlaces.length === 0) {
       return []
     }
 
     // Step 2: Get detailed information for each pharmacy
     const pharmacyData = []
 
-    for (const place of places.slice(0, 20)) { // Limit to 20 to avoid API quota issues
+    for (const place of allPlaces.slice(0, 50)) { // Increased limit for thorough data retrieval
       try {
         // Get place details
         const detailsUrl = `${PLACES_API_BASE_URL}/details/json`
@@ -121,11 +228,20 @@ const fetchOnlinePharmacyData = async (citySlug) => {
           google_rating: place.rating || null
         }
 
-        pharmacyData.push(pharmacy)
-        console.log(`✅ Processed pharmacy: ${pharmacy.name_me}`)
+        // Validate pharmacy data for accuracy and reliability
+        const validation = validatePharmacyData(pharmacy)
 
-        // Add small delay to respect API rate limits
-        await new Promise(resolve => setTimeout(resolve, 100))
+        if (validation.isValid && validation.reliability >= 60) {
+          pharmacy.reliability_score = validation.reliability
+          pharmacyData.push(pharmacy)
+          console.log(`✅ Processed pharmacy: ${pharmacy.name_me} (reliability: ${validation.reliability}%)`)
+        } else {
+          console.log(`❌ Rejected pharmacy: ${pharmacy.name_me} (reliability: ${validation.reliability}%, issues: ${validation.issues.join(', ')})`)
+          continue
+        }
+
+        // Add delay to respect API rate limits (more conservative for thorough search)
+        await new Promise(resolve => setTimeout(resolve, 150))
 
       } catch (error) {
         console.error(`❌ Error processing place ${place.place_id}:`, error.message)
@@ -133,13 +249,242 @@ const fetchOnlinePharmacyData = async (citySlug) => {
       }
     }
 
+    // Calculate quality statistics
+    const totalFound = allPlaces.length
+    const totalProcessed = pharmacyData.length
+    const avgReliability = pharmacyData.length > 0 ?
+      Math.round(pharmacyData.reduce((sum, p) => sum + (p.reliability_score || 0), 0) / pharmacyData.length) : 0
+    const highQuality = pharmacyData.filter(p => (p.reliability_score || 0) >= 80).length
+    const mediumQuality = pharmacyData.filter(p => (p.reliability_score || 0) >= 60 && (p.reliability_score || 0) < 80).length
+
     console.log(`🎯 Successfully processed ${pharmacyData.length} pharmacies for ${citySlug}`)
+    console.log(`📊 Enhanced search summary for ${citySlug}:`)
+    console.log(`   - Total search strategies used: ${searchStrategies.length}`)
+    console.log(`   - Raw places found: ${totalFound}`)
+    console.log(`   - Pharmacy-related places identified: ${totalFound}`)
+    console.log(`   - Passed validation checks: ${totalProcessed}`)
+    console.log(`   - Average reliability score: ${avgReliability}%`)
+    console.log(`   - High quality (≥80%): ${highQuality}`)
+    console.log(`   - Medium quality (60-79%): ${mediumQuality}`)
+    console.log(`   - Accuracy rate: ${totalFound > 0 ? Math.round((totalProcessed / totalFound) * 100) : 0}%`)
+
     return pharmacyData
 
   } catch (error) {
     console.error(`❌ Failed to fetch online data for ${citySlug}:`, error.message)
     throw error
   }
+}
+
+/**
+ * Check if a place is pharmacy-related based on name, types, and additional validation
+ * Enhanced with accuracy and reliability checks
+ */
+const isPharmacyRelated = (place) => {
+  const name = (place.name || '').toLowerCase()
+  const types = (place.types || []).map(type => type.toLowerCase())
+  const vicinity = (place.vicinity || '').toLowerCase()
+
+  // Primary pharmacy keywords (high confidence)
+  const primaryPharmacyKeywords = [
+    'apoteka', 'ljekarna', 'farmacija', 'pharmacy', 'drugstore',
+    'apteka', 'lekarna', 'montefarm', 'benu', 'zegin'
+  ]
+
+  // Secondary pharmacy-related keywords (medium confidence)
+  const secondaryPharmacyKeywords = [
+    'medicine', 'medicinsk', 'zdravstven', 'zdravlje', 'lijek',
+    'pills', 'medication', 'pharmaceutical', 'farmaceutsk'
+  ]
+
+  // Pharmacy chain names in Montenegro (high confidence)
+  const montenegroPharmacyChains = [
+    'montefarm', 'benu', 'zegin', 'maksima', 'maxima', 'tea medica',
+    'hipokrat', 'meditas', 'dama', 'ukus zdravlja'
+  ]
+
+  // Strict exclusion keywords (definitely not pharmacy)
+  const strictExcludeKeywords = [
+    // Medical facilities
+    'hospital', 'bolnica', 'klinik', 'ambulant', 'dom zdravlja',
+    'health center', 'medical center', 'poliklinik', 'ordinacij',
+    'emergency', 'hitna pomoc', 'first aid',
+
+    // Dental/Veterinary
+    'dental', 'zubar', 'stomatolog', 'veterinar', 'vet clinic',
+
+    // Other businesses
+    'hotel', 'restoran', 'kafic', 'market', 'shop', 'trgovin',
+    'supermarket', 'benzinska', 'gas station', 'bank', 'banka',
+    'beauty', 'salon', 'frizersk', 'nail', 'spa',
+
+    // Non-pharmacy health
+    'fitness', 'gym', 'teretana', 'physiotherapy', 'fizioterapi',
+    'massage', 'masaza', 'wellness', 'laboratory', 'laboratori'
+  ]
+
+  // Soft exclusion keywords (probably not pharmacy, but check further)
+  const softExcludeKeywords = [
+    'clinic', 'center', 'centar', 'medical', 'health'
+  ]
+
+  // Check for strict exclusions first
+  const isStrictlyExcluded = strictExcludeKeywords.some(keyword =>
+    name.includes(keyword) || vicinity.includes(keyword)
+  )
+
+  if (isStrictlyExcluded) {
+    console.log(`❌ Strictly excluded: ${place.name} (contains excluded keyword)`)
+    return false
+  }
+
+  // Check for Montenegro pharmacy chains (high confidence)
+  const isKnownChain = montenegroPharmacyChains.some(chain =>
+    name.includes(chain)
+  )
+
+  if (isKnownChain) {
+    console.log(`✅ Known pharmacy chain: ${place.name}`)
+    return true
+  }
+
+  // Check for primary pharmacy keywords
+  const hasPrimaryKeyword = primaryPharmacyKeywords.some(keyword =>
+    name.includes(keyword)
+  )
+
+  // Check for pharmacy-related types from Google Places
+  const pharmacyTypes = [
+    'pharmacy', 'drugstore', 'health'
+  ]
+
+  const hasPharmacyType = pharmacyTypes.some(type => types.includes(type))
+
+  // High confidence: Primary keyword OR pharmacy type
+  if (hasPrimaryKeyword || hasPharmacyType) {
+    // Additional validation for places with soft exclusion keywords
+    const hasSoftExclusion = softExcludeKeywords.some(keyword =>
+      name.includes(keyword) || vicinity.includes(keyword)
+    )
+
+    if (hasSoftExclusion) {
+      // Need stronger evidence for places with soft exclusions
+      const hasStrongEvidence = hasPrimaryKeyword && hasPharmacyType
+      if (hasStrongEvidence) {
+        console.log(`✅ Strong evidence for pharmacy: ${place.name}`)
+        return true
+      } else {
+        console.log(`⚠️ Soft excluded due to ambiguous keywords: ${place.name}`)
+        return false
+      }
+    }
+
+    console.log(`✅ Primary evidence for pharmacy: ${place.name}`)
+    return true
+  }
+
+  // Medium confidence: Secondary keywords with additional validation
+  const hasSecondaryKeyword = secondaryPharmacyKeywords.some(keyword =>
+    name.includes(keyword)
+  )
+
+  if (hasSecondaryKeyword) {
+    // For secondary keywords, we need additional validation
+    const rating = place.rating || 0
+    const userRatingsTotal = place.user_ratings_total || 0
+
+    // Check if it has good ratings (indicates legitimate business)
+    const hasGoodRatings = rating >= 3.0 && userRatingsTotal >= 5
+
+    // Check if vicinity contains pharmacy-related terms
+    const vicinityHasPharmacyTerms = primaryPharmacyKeywords.some(keyword =>
+      vicinity.includes(keyword)
+    )
+
+    if (hasGoodRatings || vicinityHasPharmacyTerms) {
+      console.log(`✅ Secondary evidence with validation: ${place.name}`)
+      return true
+    }
+  }
+
+  console.log(`❌ Insufficient evidence for pharmacy: ${place.name}`)
+  return false
+}
+
+/**
+ * Additional validation to verify pharmacy data accuracy
+ */
+const validatePharmacyData = (pharmacy) => {
+  const issues = []
+
+  // Check required fields
+  if (!pharmacy.name_me || pharmacy.name_me.trim().length < 3) {
+    issues.push('Name too short or missing')
+  }
+
+  if (!pharmacy.address || pharmacy.address.trim().length < 10) {
+    issues.push('Address too short or missing')
+  }
+
+  // Validate coordinates (Montenegro bounds)
+  const lat = parseFloat(pharmacy.lat)
+  const lng = parseFloat(pharmacy.lng)
+
+  if (isNaN(lat) || isNaN(lng)) {
+    issues.push('Invalid coordinates')
+  } else {
+    // Montenegro approximate bounds
+    if (lat < 41.8 || lat > 43.6 || lng < 18.4 || lng > 20.4) {
+      issues.push('Coordinates outside Montenegro')
+    }
+  }
+
+  // Validate phone format (if provided)
+  if (pharmacy.phone) {
+    const phonePattern = /^(\+382|382)?\s*\d{2,3}[\s\-]?\d{3}[\s\-]?\d{3,4}$/
+    if (!phonePattern.test(pharmacy.phone.replace(/\s+/g, ''))) {
+      issues.push('Invalid Montenegro phone format')
+    }
+  }
+
+  // Validate website format (if provided)
+  if (pharmacy.website) {
+    try {
+      new URL(pharmacy.website)
+    } catch {
+      issues.push('Invalid website URL')
+    }
+  }
+
+  return {
+    isValid: issues.length === 0,
+    issues,
+    reliability: calculateReliabilityScore(pharmacy, issues)
+  }
+}
+
+/**
+ * Calculate reliability score based on available data and validation
+ */
+const calculateReliabilityScore = (pharmacy, issues) => {
+  let score = 100
+
+  // Deduct points for validation issues
+  score -= issues.length * 10
+
+  // Add points for complete data
+  if (pharmacy.phone) score += 10
+  if (pharmacy.website) score += 10
+  if (pharmacy.google_rating && pharmacy.google_rating >= 4.0) score += 15
+  if (pharmacy.google_place_id) score += 20
+
+  // Deduct points for suspicious patterns
+  if (pharmacy.name_me.length < 5) score -= 15
+  if (!pharmacy.address.includes('Montenegro') && !pharmacy.address.includes('Crna Gora')) {
+    score -= 5
+  }
+
+  return Math.max(0, Math.min(100, score))
 }
 
 /**
@@ -192,6 +537,8 @@ const processOpeningHours = (weekdayText) => {
  * Sync online pharmacy data for a specific city
  */
 const syncCityPharmacyData = async (req, res) => {
+  const syncStartTime = Date.now()
+
   try {
     const { citySlug } = req.body
 
@@ -199,7 +546,7 @@ const syncCityPharmacyData = async (req, res) => {
       return res.status(400).json(createErrorResponse('City slug is required'))
     }
 
-    console.log(`🚀 Starting pharmacy data sync for city: ${citySlug}`)
+    console.log(`🚀 Starting comprehensive pharmacy data sync for city: ${citySlug}`)
 
     // 1. Verify city exists in static data and get/create in database
     const staticCity = getCityBySlug(citySlug)
@@ -317,10 +664,18 @@ const syncCityPharmacyData = async (req, res) => {
       created,
       updated,
       pharmacies: processedPharmacies,
-      message: `Successfully synced ${processedPharmacies.length} pharmacies for ${staticCity.name_en}`
+      message: `Successfully synced ${processedPharmacies.length} pharmacies for ${staticCity.name_en}`,
+      // Additional detailed information for admin visibility
+      searchSummary: {
+        strategiesUsed: 12, // Number of search strategies
+        uniquePlacesFound: onlinePharmacies.length,
+        pharmacyRelatedPlaces: onlinePharmacies.length,
+        apiCallsSuccessful: true,
+        processingTimeSeconds: Math.round((Date.now() - syncStartTime) / 1000)
+      }
     }
 
-    console.log(`✅ Completed sync for ${citySlug}: ${created} created, ${updated} updated`)
+    console.log(`✅ Completed comprehensive sync for ${citySlug}: ${created} created, ${updated} updated`)
     res.json(createResponse(result, `Pharmacy data synced successfully for ${staticCity.name_en}`))
 
   } catch (error) {

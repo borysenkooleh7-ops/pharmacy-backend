@@ -35,7 +35,10 @@ const getAllAds = async (req, res) => {
 
 const getActiveAds = async (req, res) => {
   try {
-    const ads = await Ad.findActiveAds()
+    // Get language from header or default to 'me'
+    const language = req.headers['x-language'] || 'me'
+
+    const ads = await Ad.findActiveAds(language)
     res.json(createResponse(ads, 'Active ads retrieved successfully'))
   } catch (error) {
     console.error('Error fetching active ads:', error)
@@ -63,14 +66,22 @@ const createAd = async (req, res) => {
   try {
     const adData = req.body
 
-    // Validate required fields
-    const requiredFields = ['name', 'image_url', 'target_url']
+    // Validate required fields for bilingual schema
+    const requiredFields = ['name_me', 'image_url', 'target_url']
     const missingFields = requiredFields.filter(field => !adData[field])
 
     if (missingFields.length > 0) {
       return res.status(400).json(createErrorResponse(
         `Missing required fields: ${missingFields.join(', ')}`
       ))
+    }
+
+    // Validate name lengths (match database constraints)
+    if (adData.name_me && adData.name_me.length > 200) {
+      return res.status(400).json(createErrorResponse('Montenegrin name must be 200 characters or less'))
+    }
+    if (adData.name_en && adData.name_en.length > 200) {
+      return res.status(400).json(createErrorResponse('English name must be 200 characters or less'))
     }
 
     // Validate URLs
@@ -106,6 +117,14 @@ const updateAd = async (req, res) => {
     const existingAd = await Ad.findByPk(id)
     if (!existingAd) {
       return res.status(404).json(createErrorResponse('Ad not found'))
+    }
+
+    // Validate name lengths if provided (match database constraints)
+    if (updateData.name_me && updateData.name_me.length > 200) {
+      return res.status(400).json(createErrorResponse('Montenegrin name must be 200 characters or less'))
+    }
+    if (updateData.name_en && updateData.name_en.length > 200) {
+      return res.status(400).json(createErrorResponse('English name must be 200 characters or less'))
     }
 
     // Validate URLs if provided

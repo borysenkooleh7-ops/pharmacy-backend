@@ -10,9 +10,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      name_me: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      name_en: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       image_url: {
         type: Sequelize.TEXT,
@@ -68,7 +72,7 @@ module.exports = {
     await queryInterface.addIndex('ads', ['start_date', 'end_date']);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('ads');
   }
 };
