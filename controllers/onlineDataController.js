@@ -60,13 +60,6 @@ const fetchOnlinePharmacyData = async (citySlug) => {
         type: 'pharmacy',
         key: GOOGLE_API_KEY
       },
-      {
-        location: `${cityCoords.lat},${cityCoords.lng}`,
-        radius: baseRadius,
-        type: 'health',
-        key: GOOGLE_API_KEY
-      },
-
       // Keyword searches in Montenegrin
       {
         location: `${cityCoords.lat},${cityCoords.lng}`,

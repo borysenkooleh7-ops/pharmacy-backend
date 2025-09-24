@@ -28,14 +28,22 @@ const getAllPharmacies = async (req, res) => {
 
     const filters = {
       cityId: cityId ? parseInt(cityId) : null,
-      is24h,
-      openSunday,
-      search,
+      is24h: is24h === 'true' || is24h === true,
+      openSunday: openSunday === 'true' || openSunday === true,
+      search: search && search.trim() !== '' ? search.trim() : null,
       // For admin requests, sort by most recent (updated_at DESC)
       sortBy: isAdminRequest ? 'recent' : null,
       limit: actualLimit,
       offset: isUnlimited ? null : (parseInt(page) - 1) * parseInt(limit)
     }
+
+    console.log(`🔍 Pharmacy filtering with params:`, {
+      cityId: filters.cityId,
+      is24h: filters.is24h,
+      openSunday: filters.openSunday,
+      search: filters.search,
+      language
+    })
 
     const result = await Pharmacy.findWithFilters(filters, language)
     const pharmacies = result.rows || []

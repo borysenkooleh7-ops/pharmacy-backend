@@ -64,11 +64,11 @@ module.exports = (sequelize, DataTypes) => {
         where.city_id = filters.cityId;
       }
 
-      if (filters.is24h === 'true') {
+      if (filters.is24h === true) {
         where.is_24h = true;
       }
 
-      if (filters.openSunday === 'true') {
+      if (filters.openSunday === true) {
         where.open_sunday = true;
       }
 
