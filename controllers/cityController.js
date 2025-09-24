@@ -4,6 +4,9 @@ const { getAllCities: getStaticCities, getCityById: getStaticCityById, getCityBy
 
 const getAllCities = async (req, res) => {
   try {
+    // Get language from header or default to 'me'
+    const language = req.headers['x-language'] || 'me'
+
     // Return database cities to ensure IDs match what pharmacies use
     const cities = await City.findAll({
       order: [['name_me', 'ASC']]

@@ -14,6 +14,9 @@ const getAllPharmacies = async (req, res) => {
       unlimited = false
     } = req.query
 
+    // Get language from header or default to 'me'
+    const language = req.headers['x-language'] || 'me'
+
     // Remove nearby search from general endpoint - use dedicated /nearby endpoint instead
 
     // Check if this is an admin request (has x-admin-key header)
@@ -34,7 +37,7 @@ const getAllPharmacies = async (req, res) => {
       offset: isUnlimited ? null : (parseInt(page) - 1) * parseInt(limit)
     }
 
-    const result = await Pharmacy.findWithFilters(filters)
+    const result = await Pharmacy.findWithFilters(filters, language)
     const pharmacies = result.rows || []
     const total = result.count || 0
 
@@ -185,11 +188,15 @@ const getNearbyPharmacies = async (req, res) => {
     const { lat, lng } = req.coordinates
     const { radius = config.search.radius, limit = config.search.nPharmacies } = req.query
 
+    // Get language from header or default to 'me'
+    const language = req.headers['x-language'] || 'me'
+
     const pharmacies = await Pharmacy.findNearby(
       lat,
       lng,
       parseFloat(radius),
-      Math.min(parseInt(limit), config.pagination.maxLimit)
+      Math.min(parseInt(limit), config.pagination.maxLimit),
+      language
     )
 
     res.json(createResponse(pharmacies, 'Nearby pharmacies retrieved successfully'))

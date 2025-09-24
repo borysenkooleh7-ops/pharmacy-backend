@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     // Instance methods
+    getDisplayName(language = 'me') {
+      return language === 'en' && this.name_en ? this.name_en : this.name_me;
+    }
+
     isActive() {
       if (!this.active) return false;
 
@@ -37,10 +41,10 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     // Static methods
-    static async findActiveAds() {
+    static async findActiveAds(language = 'me') {
       const now = new Date();
 
-      return await this.findAll({
+      const ads = await this.findAll({
         where: {
           active: true,
           [Op.or]: [
@@ -56,6 +60,13 @@ module.exports = (sequelize, DataTypes) => {
           ['weight', 'DESC'],
           [sequelize.fn('RANDOM')]
         ]
+      });
+
+      // Transform to include display_name based on language
+      return ads.map(ad => {
+        const adData = ad.toJSON();
+        adData.display_name = ad.getDisplayName(language);
+        return adData;
       });
     }
 
@@ -88,7 +99,8 @@ module.exports = (sequelize, DataTypes) => {
         where,
         attributes: [
           'id',
-          'name',
+          'name_me',
+          'name_en',
           'click_count',
           'impression_count',
           [sequelize.literal('CASE WHEN impression_count > 0 THEN (click_count::float / impression_count * 100) ELSE 0 END'), 'ctr'],
@@ -118,12 +130,19 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    name: {
+    name_me: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
         len: [1, 200]
+      }
+    },
+    name_en: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        len: [0, 200]
       }
     },
     image_url: {
