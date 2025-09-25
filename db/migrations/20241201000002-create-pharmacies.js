@@ -33,11 +33,11 @@ module.exports = {
         allowNull: false
       },
       lat: {
-        type: Sequelize.DECIMAL(9, 6),
+        type: Sequelize.DECIMAL(13, 10),
         allowNull: false
       },
       lng: {
-        type: Sequelize.DECIMAL(9, 6),
+        type: Sequelize.DECIMAL(13, 10),
         allowNull: false
       },
       is_24h: {
