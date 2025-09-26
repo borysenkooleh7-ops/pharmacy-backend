@@ -711,8 +711,16 @@ const syncCityPharmacyData = async (req, res) => {
         searchStats.processingTimeSeconds = Math.round((Date.now() - syncStartTime) / 1000)
         delete onlinePharmacies._searchStats
       }
+      if (onlinePharmacies._searchStats) {
+        searchStats = onlinePharmacies._searchStats
+        searchStats.processingTimeSeconds = Math.round((Date.now() - syncStartTime) / 1000)
+        delete onlinePharmacies._searchStats
+      }
     } catch (error) {
+      console.error(`❌ Online search failed: ${error.message}`)
       return res.status(503).json(createErrorResponse(
+        `Failed to fetch online data for ${citySlug}: ${error.message}`,
+        { citySlug, cityName: staticCity.name_en }
         `Failed to fetch online data for ${citySlug}: ${error.message}`,
         { citySlug, cityName: staticCity.name_en }
       ))
@@ -791,6 +799,7 @@ const syncCityPharmacyData = async (req, res) => {
     const syncDuration = Math.round((Date.now() - syncStartTime) / 1000)
     const finalCount = await Pharmacy.count({ where: { city_id: city.id, active: true } })
 
+    // Build comprehensive result
     const result = {
       citySlug,
       cityName: staticCity.name_en,
@@ -856,6 +865,7 @@ const getSyncStatus = async (_req, res) => {
     const status = cities.map(city => ({
       citySlug: city.slug,
       cityName: city.name_en,
+      
       pharmacyCount: city.pharmacies ? city.pharmacies.length : 0,
       lastSync: null
     }))
