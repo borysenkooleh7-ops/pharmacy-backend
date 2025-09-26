@@ -75,11 +75,11 @@ module.exports = {
         defaultValue: 'Closed'
       },
       lat: {
-        type: Sequelize.DECIMAL(9, 6),
+        type: Sequelize.DECIMAL(13, 10),
         allowNull: true
       },
       lng: {
-        type: Sequelize.DECIMAL(9, 6),
+        type: Sequelize.DECIMAL(13, 10),
         allowNull: true
       },
       email: {

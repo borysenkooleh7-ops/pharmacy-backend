@@ -1,0 +1,7 @@
+niksic | UPDATED | Apoteka | 42.7718489,18.9481669 | Address not available |  |  |  | R=40
+niksic | UPDATED | Apoteka | 42.7743792,18.9483596 | Address not available |  |  |  | R=40
+niksic | UPDATED | Apoteka | 42.7764522,18.944115 | Address not available |  |  |  | R=40
+niksic | UPDATED | Apoteka | 42.7783257,18.9451416 | Address not available |  |  |  | R=40
+niksic | UPDATED | Remedia | 42.7771906,18.9506274 | Nikole Tesle 12 Nikšić |  |  |  | R=50
+niksic | CREATED | Apoteka BENU Nikšić HDL | 0,0 | Address not available | +382 67 239 048 | http://www.benuapoteka.me/ |  | R=75
+niksic | CREATED | Pharmacy 0-24h | 0,0 | Address not available | +382 67 148 355 | https://www.instagram.com/kultivator.me?igsh=eGxjOHI1bDJrYW1m |  | R=75

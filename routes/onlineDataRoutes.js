@@ -6,10 +6,12 @@ const {
   getSyncableCities,
   getSyncStatus
 } = require('../controllers/onlineDataController')
+const { syncAndListAllPharmacies } = require('../controllers/bootstrapPharmacies');
 
 // All routes require admin authentication
 router.use(adminAuth)
 
+// router.post('/sync-city',adminAuth, syncAndListAllPharmacies);
 // Sync pharmacy data for a specific city
 router.post('/sync-city', syncCityPharmacyData)
 

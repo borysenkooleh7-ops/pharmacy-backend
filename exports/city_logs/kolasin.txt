@@ -1,0 +1,9 @@
+kolasin | CREATED | Apoteka | 42.823698,19.5201718 | Address not available |  |  |  | R=40
+kolasin | CREATED | Apoteka Montefarm, Kolašin — Ivangradska, phone 020 ... | 0,0 | Address not available |  | https://me.polomap.com/en/%D0%BA%D0%BE%D0%BB%D0%B0%D1%88%D0%B8%D0%BD/205 |  | R=55
+kolasin | CREATED | Apoteke - Pharmacy house | 0,0 | Address not available |  | https://pharmacyhouse.me/me/apoteke |  | R=55
+kolasin | CREATED | Find your Motefarm Pharmacy | 0,0 | Address not available |  | https://montefarm.co.me/en/apoteke/ |  | R=55
+kolasin | CREATED | Medicor Pharmacy (ulica Miloša Miloševića) | 0,0 | Address not available |  | https://wanderlog.com/place/details/12229185/medicor-pharmacy-ulica-milo%C5%A1a-milo%C5%A1evi%C4%87a |  | R=55
+kolasin | CREATED | Pharmacy - 81210 Kolašin, Buda Tomovića, Pažanj - Spotic | 0,0 | Address not available |  | https://spotic.net/healthcareworldmap/places/pharmacy-81210-kola-in-buda-tomovi-a-pa-anj-kola-in-kola-in-municipality-81210-montenegro |  | R=55
+kolasin | CREATED | Pharmacy nearby Kolašin, Montenegro | 0,0 | Address not available |  | https://maps.me/catalog/health/amenity-pharmacy/crna-gora-crna-gora/kolasin-289905750/ |  | R=55
+kolasin | CREATED | Pharmacy: Apoteka "Kalina" nearby Kolašin in Montenegro | 0,0 | Address not available |  | https://maps.me/catalog/health/amenity-pharmacy/apoteka-110887525/ |  | R=55
+kolasin | CREATED | spisak privatnih apoteka sa kojima je fond za zdravstveno ... | 0,0 | Address not available |  | https://fzocg.me/wp-content/uploads/2023/11/Spisak-apoteka-za-sajt.pdf |  | R=55

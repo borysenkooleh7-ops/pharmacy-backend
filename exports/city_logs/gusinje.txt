@@ -1,0 +1,8 @@
+gusinje | CREATED | Apoteka | 42.5638539,19.8311854 | Address not available |  |  |  | R=40
+gusinje | CREATED | Apoteka GUSINJE Gusinje (Zdravstvena stanica ... | 0,0 | Address not available |  | https://www.instagram.com/p/DHaVKAMtTXt/ |  | R=55
+gusinje | CREATED | Best Pharmacy in Montenegro | 0,0 | Address not available |  | https://www.tiktok.com/discover/best-pharmacy-in-montenegro |  | R=55
+gusinje | CREATED | Find your Motefarm Pharmacy | 0,0 | Address not available |  | https://montefarm.co.me/en/apoteke/ |  | R=55
+gusinje | CREATED | Healing Herbs at Apoteka ljekovitog bilja "Adem Jasavić" | 0,0 | Address not available |  | https://evendo.com/locations/montenegro/lakes-of-plav/shop/apoteka-ljekovitog-bilja-adem-jasavic-plav |  | R=55
+gusinje | CREATED | Pharmacy - Dom zdravlja, Čaršijska, Gusinje - Spotic | 0,0 | Address not available |  | https://spotic.net/healthcareworldmap/places/pharmacy-dom-zdravlja--ar-ijska-gusinje-gusinje-municipality-84326-montenegro |  | R=55
+gusinje | CREATED | Pharmacy in Montenegro in Rudar | 0,0 | Address not available |  | https://www.tiktok.com/discover/pharmacy-in-montenegro-in-rudar |  | R=55
+gusinje | CREATED | Prima, Pharmacy - Racina, Ribare - Spotic | 0,0 | Address not available |  | https://spotic.net/healthcareworldmap/places/prima-pharmacy-racina-ribare-plav-plav-municipality-84325-montenegro |  | R=55

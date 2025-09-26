@@ -1,0 +1,5 @@
+danilovgrad | UPDATED | Apoteka Higija | 42.5518234,19.1053094 | 11 |  |  |  | R=40
+danilovgrad | CREATED | Apoteka Montefarm | 42.4524346,19.2244243 | Ivangradska 34 Podgorica |  |  |  | R=50
+danilovgrad | CREATED | Apoteka "Benu" Danilovgrad | 0,0 | Debit cards |  |  |  | R=55
+danilovgrad | CREATED | Apoteka Meditas 8 | 0,0 | Address not available | +382 20 813 213 |  |  | R=65
+danilovgrad | CREATED | Montefarm Apoteka Danilovgrad | 0,0 | Address not available | +382 67 148 541 | https://montefarm.co.me/ |  | R=75

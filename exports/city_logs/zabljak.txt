@@ -1,0 +1,9 @@
+zabljak | CREATED | Apoteka | 43.1546802,19.1208005 | Address not available |  |  |  | R=40
+zabljak | UPDATED | Apoteka | 43.1524271,19.1301525 | Address not available |  |  |  | R=40
+zabljak | CREATED | Apoteka Montefarm Žabljak | 0,0 | Address not available |  | https://apoteke.me/mne/apoteke/apoteka-montefarm-zabljak |  | R=55
+zabljak | CREATED | Driving directions to Apoteka Zabljak, Žabljak | 0,0 | Address not available |  | https://www.waze.com/af/live-map/directions/me/zabljak-municipality/zabljak/apoteka-zabljak?to=place.ChIJ56dsy2Q5TRMRK-Xe6rOq6oM |  | R=55
+zabljak | CREATED | Find your Motefarm Pharmacy | 0,0 | Address not available |  | https://montefarm.co.me/en/apoteke/ |  | R=55
+zabljak | CREATED | Medicor pharmacy | 0,0 | Address not available |  | https://www.kamelija.me/en/stores/medicor-pharmacy/ |  | R=55
+zabljak | CREATED | Medicor Pharmacy (ulica Miloša Miloševića) | 0,0 | Address not available |  | https://wanderlog.com/place/details/12229185/medicor-pharmacy-ulica-milo%C5%A1a-milo%C5%A1evi%C4%87a |  | R=55
+zabljak | CREATED | Spisak-apoteka.pdf - Podgorica | 0,0 | Address not available |  | https://fzocg.me/wp-content/uploads/2025/03/Spisak-apoteka.pdf |  | R=55
+zabljak | CREATED | The Health Institution of the Pharmacy of Montenegro “ ... | 0,0 | Address not available |  | https://europeantourismorganization.eu/locations/the-health-institution-of-the-pharmacy-of-montenegro-montefarm/ |  | R=55

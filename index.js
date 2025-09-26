@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+// const { bootstrapPharmacies } = require('./controllers/bootstrapPharmacies');
 
 // Import configuration
 const config = require('./config')
@@ -80,6 +81,7 @@ const startServer = async () => {
       console.log(`📚 API Documentation: http://localhost:${config.port}${config.api.prefix}/docs`)
       console.log(`💚 Health Check: http://localhost:${config.port}/health`)
       console.log(`🌍 Environment: ${config.nodeEnv}`)
+      // bootstrapPharmacies(); // single run on boot
     })
 
     return server

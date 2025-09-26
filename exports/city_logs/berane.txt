@@ -1,0 +1,5 @@
+berane | CREATED | Apoteka | 42.8412032,19.8720631 | Address not available |  |  |  | R=40
+berane | UPDATED | Apoteka | 42.7333445,19.7923635 | Address not available |  |  |  | R=40
+berane | CREATED | Apoteka "Galenus" | 0,0 | Address not available | +382 51 230 488 |  |  | R=65
+berane | CREATED | Apoteka BENU Berane Centar | 0,0 | Address not available | +382 67 203 052 | http://www.benuapoteka.me/ |  | R=75
+berane | CREATED | Apoteka Gušmirović Berane | 0,0 | Address not available | +382 51 233 574 |  |  | R=65

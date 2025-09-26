@@ -1,0 +1,37 @@
+# Pharmacy bootstrap summary
+Timestamp: 2025-09-26T20:04:42.536Z
+Cities: 25
+Discovered online: 414
+Created: 200
+Updated: 214
+Errors: 0
+Duration(s): 696
+
+## Per-city
+podgorica | online=61 | created=9 | updated=52 | errors=0 | t=27s
+niksic | online=7 | created=2 | updated=5 | errors=0 | t=26s
+bar | online=22 | created=4 | updated=18 | errors=0 | t=26s
+budva | online=29 | created=7 | updated=22 | errors=0 | t=26s
+herceg-novi | online=29 | created=12 | updated=17 | errors=0 | t=26s
+kotor | online=21 | created=10 | updated=11 | errors=0 | t=26s
+tivat | online=27 | created=9 | updated=18 | errors=0 | t=26s
+cetinje | online=33 | created=19 | updated=14 | errors=0 | t=26s
+berane | online=5 | created=4 | updated=1 | errors=0 | t=26s
+bijelo-polje | online=8 | created=3 | updated=5 | errors=0 | t=26s
+pljevlja | online=10 | created=8 | updated=2 | errors=0 | t=26s
+ulcinj | online=4 | created=1 | updated=3 | errors=0 | t=26s
+kolasin | online=9 | created=9 | updated=0 | errors=0 | t=26s
+mojkovac | online=5 | created=4 | updated=1 | errors=0 | t=26s
+rozaje | online=5 | created=4 | updated=1 | errors=0 | t=26s
+plav | online=6 | created=4 | updated=2 | errors=0 | t=26s
+zabljak | online=9 | created=8 | updated=1 | errors=0 | t=26s
+andrijevica | online=9 | created=7 | updated=2 | errors=0 | t=26s
+danilovgrad | online=5 | created=4 | updated=1 | errors=0 | t=26s
+golubovci | online=41 | created=24 | updated=17 | errors=0 | t=26s
+tuzi | online=46 | created=27 | updated=19 | errors=0 | t=26s
+petnjica | online=5 | created=5 | updated=0 | errors=0 | t=26s
+gusinje | online=8 | created=8 | updated=0 | errors=0 | t=26s
+pluzine | online=3 | created=2 | updated=1 | errors=0 | t=26s
+savnik | online=7 | created=6 | updated=1 | errors=0 | t=26s
+
+Note: Detailed per-city lines are saved in exports/city_logs/*.txt

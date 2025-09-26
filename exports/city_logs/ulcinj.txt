@@ -1,0 +1,4 @@
+ulcinj | UPDATED | Apoteka Tea Medica | 41.9299081,19.2165758 | Address not available |  |  |  | R=40
+ulcinj | CREATED | Apoteka | 41.9291583,19.2192267 | Address not available |  |  |  | R=40
+ulcinj | UPDATED | Apoteka | 41.9132288,19.2427476 | Address not available |  |  |  | R=40
+ulcinj | UPDATED | Apoteka | 42.0025312,19.2987903 | Address not available |  |  |  | R=40

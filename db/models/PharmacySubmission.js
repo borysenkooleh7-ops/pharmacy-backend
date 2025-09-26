@@ -136,11 +136,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false
     },
     lat: {
-      type: DataTypes.DECIMAL(9, 6),
+      type: DataTypes.DECIMAL(13, 10),
       allowNull: true
     },
     lng: {
-      type: DataTypes.DECIMAL(9, 6),
+      type: DataTypes.DECIMAL(13, 10),
       allowNull: true
     },
     hours_monfri: {
