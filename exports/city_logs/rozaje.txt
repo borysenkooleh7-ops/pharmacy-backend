@@ -1,5 +1,0 @@
-rozaje | CREATED | Apoteka | 42.8425007,20.1651568 | Address not available |  |  |  | R=40
-rozaje | UPDATED | Apoteka "Hamas" | 42.8442305,20.1699839 | Address not available |  |  |  | R=40
-rozaje | CREATED | Apoteka Gušmirović Rožaje | 0,0 | Address not available | +382 51 271 302 |  |  | R=65
-rozaje | CREATED | Apoteka Tea Medica | 0,0 | Address not available |  |  |  | R=55
-rozaje | CREATED | Pharmacy Montefarm Jatros | 0,0 | Address not available | +382 51 271 111 | http://montefarm.co.me/ |  | R=75

@@ -1,7 +1,0 @@
-savnik | CREATED | Apoteka | 43.1524271,19.1301525 | Address not available |  |  |  | R=40
-savnik | UPDATED | Apoteka | 43.1546802,19.1208005 | Address not available |  |  |  | R=40
-savnik | CREATED | Apoteka PHARMA DISKONT Mall of Montenegro - Podgorica | 0,0 | Address not available |  | https://apoteke.me/mne/apoteke/apoteka-pharma-standard |  | R=55
-savnik | CREATED | APOTEKE.ME | ZBIRNA ONLINE APOTEKA CRNA GORA ... | 0,0 | Address not available |  | https://apoteke.me/mne |  | R=55
-savnik | CREATED | Find your Motefarm Pharmacy | 0,0 | Address not available |  | https://montefarm.co.me/en/apoteke/ |  | R=55
-savnik | CREATED | Počinju DANI DARIVANJA u Montefarm apotekama 🥰 ... | 0,0 | Address not available |  | https://www.instagram.com/p/C3XVNePoCqb/?hl=en |  | R=55
-savnik | CREATED | THE FIRST STATE PHARMACY IN MONTENEGRO - a ... | 0,0 | Address not available |  | https://montefarm.co.me/en/blogovi/prva-drzavna-apoteka-u-crnoj-gori-stara-145-godina-spomenik-kulture-koji-je-sacuvao-autentican-izgled/ |  | R=55

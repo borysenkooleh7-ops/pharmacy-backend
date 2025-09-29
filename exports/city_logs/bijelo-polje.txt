@@ -1,8 +1,0 @@
-bijelo-polje | CREATED | Apoteka | 43.0350744,19.7477277 | Address not available |  |  |  | R=40
-bijelo-polje | UPDATED | Centar | 43.0347738,19.7498567 | Address not available |  |  |  | R=40
-bijelo-polje | UPDATED | Stanić | 43.0358422,19.7505313 | Voja Lješnjaka 1 Bijelo Polje |  |  |  | R=50
-bijelo-polje | UPDATED | Apoteka Lijek | 43.0524597,19.7718382 | Address not available |  |  |  | R=40
-bijelo-polje | UPDATED | Apoteka | 42.9628341,19.5804372 | Address not available |  |  |  | R=40
-bijelo-polje | UPDATED | Apoteka | 42.9600598,19.5802303 | Address not available |  |  |  | R=40
-bijelo-polje | CREATED | Apoteka GUŠMIROVIĆ | 0,0 | Address not available | +382 50 431 619 | https://m.facebook.com/Apoteka-Gu%C5%A1mirovi%C4%87-154834654572140/ |  | R=75
-bijelo-polje | CREATED | Tea Medica Apoteka | 0,0 | Debit cards |  |  |  | R=55

@@ -177,7 +177,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     city_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'cities',
         key: 'id'
@@ -185,7 +185,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     name_me: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: true,
         len: [1, 200]
@@ -200,7 +200,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: true,
         len: [1, 300]
@@ -208,7 +208,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     lat: {
       type: DataTypes.DECIMAL(13, 10),
-      allowNull: false,
+      allowNull: true,
       validate: {
         min: -90,
         max: 90
@@ -220,7 +220,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     lng: {
       type: DataTypes.DECIMAL(13, 10),
-      allowNull: false,
+      allowNull: true,
       validate: {
         min: -180,
         max: 180
@@ -232,31 +232,31 @@ module.exports = (sequelize, DataTypes) => {
     },
     is_24h: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: false
     },
     open_sunday: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: false
     },
     hours_monfri: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: true
       }
     },
     hours_sat: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: true
       }
     },
     hours_sun: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: true
       }
@@ -277,7 +277,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     active: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: true
     },
     google_place_id: {

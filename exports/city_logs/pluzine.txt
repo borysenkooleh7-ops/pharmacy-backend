@@ -1,3 +1,0 @@
-pluzine | CREATED | Apoteka | 43.154919,18.8458736 | Address not available |  |  |  | R=40
-pluzine | CREATED | Apoteka Montefarm Pluzine | 0,0 | Address not available | +382 67 148 635 | http://montefarm.co.me/ |  | R=75
-pluzine | UPDATED | Pharmacy | 0,0 | Address not available |  |  |  | R=55

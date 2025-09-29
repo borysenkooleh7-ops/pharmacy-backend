@@ -5,14 +5,14 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('pharmacies', {
       id: {
-        allowNull: false,
+        allowNull: true,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
       city_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'cities',
           key: 'id'
@@ -22,7 +22,7 @@ module.exports = {
       },
       name_me: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       name_en: {
         type: Sequelize.STRING,
@@ -30,37 +30,37 @@ module.exports = {
       },
       address: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       lat: {
         type: Sequelize.DECIMAL(13, 10),
-        allowNull: false
+        allowNull: true
       },
       lng: {
         type: Sequelize.DECIMAL(13, 10),
-        allowNull: false
+        allowNull: true
       },
       is_24h: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         defaultValue: false
       },
       open_sunday: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         defaultValue: false
       },
       hours_monfri: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       hours_sat: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       hours_sun: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       phone: {
         type: Sequelize.STRING,
@@ -72,7 +72,7 @@ module.exports = {
       },
       active: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         defaultValue: true
       },
       google_place_id: {
@@ -85,12 +85,12 @@ module.exports = {
         allowNull: true
       },
       created_at: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updated_at: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }

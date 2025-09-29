@@ -1,13 +1,15 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-// const { bootstrapPharmacies } = require('./controllers/bootstrapPharmacies');
 
 // Import configuration
 const config = require('./config')
 
 // Initialize Sequelize
 const { sequelize } = require('./db/models')
+
+// Import initialization function
+// const { initializePharmacyData } = require('./initialize')
 
 // Import middleware
 const {
@@ -76,12 +78,20 @@ const startServer = async () => {
     await sequelize.authenticate()
     console.log('✅ Database connection established successfully')
 
+    // Initialize pharmacy data if needed
+    // if (config.nodeEnv === 'development' || config.nodeEnv === 'production') {
+    //   try {
+    //     await initializePharmacyData()
+    //   } catch (initError) {
+    //     console.error('⚠️  Pharmacy initialization failed, but server will continue:', initError.message)
+    //   }
+    // }
+
     const server = app.listen(config.port, () => {
       console.log(`🚀 Server running on port ${config.port}`)
       console.log(`📚 API Documentation: http://localhost:${config.port}${config.api.prefix}/docs`)
       console.log(`💚 Health Check: http://localhost:${config.port}/health`)
       console.log(`🌍 Environment: ${config.nodeEnv}`)
-      // bootstrapPharmacies(); // single run on boot
     })
 
     return server

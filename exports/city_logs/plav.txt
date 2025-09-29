@@ -1,6 +1,0 @@
-plav | UPDATED | Državna | 42.5969549,19.9445632 | Address not available |  |  |  | R=40
-plav | CREATED | Apoteka | 42.6614342,19.8851005 | Address not available |  |  |  | R=40
-plav | UPDATED | Apoteka | 42.5638539,19.8311854 | Address not available |  |  |  | R=40
-plav | CREATED | Apoteka ljekovitog bilja "Adem Jasavić" - Plav | 0,0 | Address not available | +382 68 871 065 | https://www.facebook.com/proizvodijasavic?mibextid=ZbWKwL |  | R=75
-plav | CREATED | Apoteka Montefarm Zdravlje | 0,0 | Address not available | +382 67 148 622 | http://montefarm.co.me/ |  | R=75
-plav | CREATED | Montefarm Apoteka Plav | 0,0 | Address not available | +382 67 148 614 | https://montefarm.co.me/ |  | R=75
