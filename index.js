@@ -9,7 +9,7 @@ const config = require('./config')
 const { sequelize } = require('./db/models')
 
 // Import initialization function
-// const { initializePharmacyData } = require('./initialize')
+const { initializePharmacyData } = require('./initialize')
 
 // Import middleware
 const {
@@ -79,13 +79,13 @@ const startServer = async () => {
     console.log('✅ Database connection established successfully')
 
     // Initialize pharmacy data if needed
-    // if (config.nodeEnv === 'development' || config.nodeEnv === 'production') {
-    //   try {
-    //     await initializePharmacyData()
-    //   } catch (initError) {
-    //     console.error('⚠️  Pharmacy initialization failed, but server will continue:', initError.message)
-    //   }
-    // }
+    if (config.nodeEnv === 'development' || config.nodeEnv === 'production') {
+      try {
+        await initializePharmacyData()
+      } catch (initError) {
+        console.error('⚠️  Pharmacy initialization failed, but server will continue:', initError.message)
+      }
+    }
 
     const server = app.listen(config.port, () => {
       console.log(`🚀 Server running on port ${config.port}`)

@@ -39,6 +39,7 @@ const CONCURRENCY           = parseInt(process.env.CONCURRENCY || '6', 10)
 const RETRIES               = parseInt(process.env.RETRIES || '2', 10)
 const GOOGLE_PAGE_DELAY_MS  = parseInt(process.env.GOOGLE_PAGE_DELAY_MS || '2300', 10)
 const GOOGLE_OQL_SLEEP_MS   = parseInt(process.env.GOOGLE_OQL_SLEEP_MS || '6000', 10)
+const FETCH_PLACE_DETAILS   = process.env.FETCH_PLACE_DETAILS !== 'false' // Enable by default (set to 'false' to disable)
 
 const OVERPASS_POOL = [
   'https://overpass-api.de/api/interpreter',
@@ -230,21 +231,49 @@ async function gFetch(url) {
     return { ok:true, j }
   } catch(_e){ return { ok:false, j:{} } }
 }
-function fromPlaces(r){
+
+// NEW: Fetch detailed place information using Place Details API
+async function googlePlaceDetails(placeId) {
+  if (!GOOGLE_API_KEY || !placeId) return null
+  const fields = 'place_id,name,formatted_address,geometry,formatted_phone_number,international_phone_number,website,opening_hours,rating,user_ratings_total,business_status,types'
+  const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&key=${GOOGLE_API_KEY}&language=sr`
+  const { ok, j } = await gFetch(url)
+  if (!ok || j?.status !== 'OK') return null
+  return j.result
+}
+
+function fromPlaces(r, hasDetails = false){
   const loc = r.geometry?.location || {}
+
+  // Extract phone number (prefer international format)
+  let phone = null
+  if (r.international_phone_number) {
+    phone = r.international_phone_number
+  } else if (r.formatted_phone_number) {
+    phone = r.formatted_phone_number
+  }
+
+  // Extract opening hours
+  let opening_hours = null
+  if (r.opening_hours?.weekday_text) {
+    opening_hours = r.opening_hours.weekday_text.join('; ')
+  }
+
   return pharmacyItem({
     source_type: 'GOOGLE',
     place_id: r.place_id,
     name_me: r.name || null,
-    address: r.vicinity || r.formatted_address || null,
+    address: r.formatted_address || r.vicinity || null,
     lat: typeof loc.lat==='number' ? loc.lat : null,
     lon: typeof loc.lng==='number' ? loc.lng : null,
+    phone: phone,
     website: r.website || null,
-    opening_hours: r.opening_hours?.weekday_text?.join('; ') || null,
+    opening_hours: opening_hours,
+    google_rating: r.rating || null,
     coord_source: 'GOOGLE'
   })
 }
-async function googleNearby(lat, lng, { kw=null, lang='sr', radius=GOOGLE_RADIUS_M } = {}){
+async function googleNearby(lat, lng, { kw=null, lang='sr', radius=GOOGLE_RADIUS_M, fetchDetails=true } = {}){
   if (!GOOGLE_API_KEY) return []
   const base = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${GOOGLE_API_KEY}&location=${lat},${lng}&radius=${radius}${kw?`&keyword=${encodeURIComponent(kw)}`:''}&language=${lang}${kw?'':'&type=pharmacy'}`
   const out=[]; const seen=new Set(); let token=null; let page=0
@@ -256,18 +285,52 @@ async function googleNearby(lat, lng, { kw=null, lang='sr', radius=GOOGLE_RADIUS
     if (!['OK','ZERO_RESULTS','INVALID_REQUEST'].includes(j?.status)) break
     for (const r of (j?.results||[])){
       if (!r.place_id || seen.has(r.place_id)) continue
-      seen.add(r.place_id); out.push(fromPlaces(r))
+      seen.add(r.place_id)
+
+      // NEW: Fetch detailed information if requested
+      if (fetchDetails) {
+        await SLEEP(100) // Small delay to avoid rate limits
+        const details = await googlePlaceDetails(r.place_id)
+        if (details) {
+          out.push(fromPlaces(details, true))
+        } else {
+          out.push(fromPlaces(r, false))
+        }
+      } else {
+        out.push(fromPlaces(r, false))
+      }
     }
     token = j?.next_page_token || null; page++
   } while(token && page<3)
   return out
 }
-async function googleText(q, lang='sr'){
+async function googleText(q, lang='sr', fetchDetails=true){
   if (!GOOGLE_API_KEY) return []
   const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?key=${GOOGLE_API_KEY}&query=${encodeURIComponent(q)}&region=me&language=${lang}`
   const { j } = await gFetch(url)
   if (!['OK','ZERO_RESULTS'].includes(j?.status)) return []
-  return (j.results||[]).map(fromPlaces)
+
+  const results = j.results || []
+  const out = []
+
+  // NEW: Fetch details for each result
+  for (const r of results) {
+    if (!r.place_id) continue
+
+    if (fetchDetails) {
+      await SLEEP(100) // Small delay to avoid rate limits
+      const details = await googlePlaceDetails(r.place_id)
+      if (details) {
+        out.push(fromPlaces(details, true))
+      } else {
+        out.push(fromPlaces(r, false))
+      }
+    } else {
+      out.push(fromPlaces(r, false))
+    }
+  }
+
+  return out
 }
 
 // ----------------- Provider: Foursquare -----------------
@@ -501,24 +564,52 @@ function fuzzyMerge(items){
 async function sweepGoogleCity(center, deadline){
   if (!GOOGLE_API_KEY) return []
   let all=[]
-  // base
-  all.push(...await googleNearby(center.lat, center.lng, { kw:null, lang:'sr', radius:center.radius }))
-  // core kws in 2 langs
-  for (const lang of LANGS.slice(0,2)){
-    for (const kw of KW_CORE.slice(0,5)){
+
+  // IMPROVED: Base search with details enabled (will get phone, website, hours)
+  all.push(...await googleNearby(center.lat, center.lng, { kw:null, lang:'sr', radius:center.radius, fetchDetails:true }))
+
+  // IMPROVED: More comprehensive keyword search across more languages
+  for (const lang of LANGS.slice(0,4)){  // Increased from 2 to 4 languages (sr, hr, en, sq)
+    for (const kw of KW_CORE){  // Use ALL core keywords, not just 5
       if (timedOut(deadline)) break
-      all.push(...await googleNearby(center.lat, center.lng, { kw, lang, radius:center.radius }))
+      all.push(...await googleNearby(center.lat, center.lng, { kw, lang, radius:center.radius, fetchDetails:true }))
     }
   }
+
+  // IMPROVED: Add specific search patterns that find more pharmacies
+  const additionalPatterns = [
+    'ljekarna', 'дежурна апотека', 'non stop apoteka',
+    'pharmacy near me', 'farmacia', 'аптека',
+    'zdravlje apoteka', 'medical pharmacy'
+  ]
+  for (const pattern of additionalPatterns) {
+    if (timedOut(deadline)) break
+    all.push(...await googleNearby(center.lat, center.lng, { kw:pattern, lang:'sr', radius:center.radius, fetchDetails:true }))
+  }
+
   // text search chain + qualifiers with municipality names
   for (const m of MUNICIPALITIES){
     for (const lang of LANGS.slice(0,2)){
       for (const kw of [...KW_CHAINS.slice(0,3), ...KW_QUAL.slice(0,3)]){
         if (timedOut(deadline)) break
-        all.push(...await googleText(`${kw} ${m}`, lang))
+        all.push(...await googleText(`${kw} ${m}`, lang, true))  // Enable details
       }
     }
   }
+
+  // IMPROVED: Add broader text searches for the current city
+  const cityNameVariations = [
+    center.name || '',
+    center.name_me || '',
+    center.name_en || ''
+  ].filter(Boolean)
+
+  for (const cityName of cityNameVariations) {
+    if (timedOut(deadline)) break
+    all.push(...await googleText(`apoteka ${cityName}`, 'sr', true))
+    all.push(...await googleText(`pharmacy ${cityName}`, 'en', true))
+  }
+
   return dedupe(all)
 }
 
@@ -540,8 +631,9 @@ async function expandSeeds(seeds, deadline){
     if (timedOut(deadline)) return
     const lat=s.lat, lng=s.lng ?? s.lon
     const tasks=[]
-    tasks.push(googleNearby(lat,lng,{kw:null,radius:EXPANSION_RADIUS_M}))
-    for (const kw of KW_CORE.slice(0,3)) tasks.push(googleNearby(lat,lng,{kw, radius:EXPANSION_RADIUS_M}))
+    // IMPROVED: Enable details for expansion searches too
+    tasks.push(googleNearby(lat,lng,{kw:null,radius:EXPANSION_RADIUS_M,fetchDetails:true}))
+    for (const kw of KW_CORE.slice(0,3)) tasks.push(googleNearby(lat,lng,{kw, radius:EXPANSION_RADIUS_M,fetchDetails:true}))
     out.push(...(await Promise.all(tasks)).flat())
   }, CONCURRENCY)
   return dedupe(out)
@@ -565,11 +657,20 @@ async function fetchOnlinePharmacyData(citySlug) {
   const center = CITY_COORDINATES[key]
   if (!center) throw new Error(`City coordinates not found for: ${citySlug}`)
 
+  // IMPROVED: Add city name to center object for better text searches
+  const cityData = getCityBySlug(citySlug)
+  const enrichedCenter = {
+    ...center,
+    name: citySlug,
+    name_me: cityData?.name_me || citySlug,
+    name_en: cityData?.name_en || citySlug
+  }
+
   // 1) OSM baseline
   const osm = await retry(() => fetchOSMPharmacies()).catch(()=>[])
 
-  // 2) Google city-first
-  let googleCity = await sweepGoogleCity(center, deadline)
+  // 2) Google city-first with enriched center data
+  let googleCity = await sweepGoogleCity(enrichedCenter, deadline)
 
   // 3) If weak, add country H3 sweep
   if (!timedOut(deadline) && googleCity.length < 15) {
