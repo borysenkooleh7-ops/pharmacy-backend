@@ -185,34 +185,19 @@ module.exports = (sequelize, DataTypes) => {
     },
     name_me: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        notEmpty: true,
-        len: [1, 200]
-      }
+      allowNull: true
     },
     name_en: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        len: [0, 200]
-      }
     },
     address: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        notEmpty: true,
-        len: [1, 300]
-      }
     },
     lat: {
       type: DataTypes.DECIMAL(13, 10),
       allowNull: true,
-      validate: {
-        min: -90,
-        max: 90
-      },
       get() {
         const value = this.getDataValue('lat')
         return value !== null && value !== undefined ? parseFloat(value) : null
@@ -221,10 +206,6 @@ module.exports = (sequelize, DataTypes) => {
     lng: {
       type: DataTypes.DECIMAL(13, 10),
       allowNull: true,
-      validate: {
-        min: -180,
-        max: 180
-      },
       get() {
         const value = this.getDataValue('lng')
         return value !== null && value !== undefined ? parseFloat(value) : null
@@ -243,37 +224,22 @@ module.exports = (sequelize, DataTypes) => {
     hours_monfri: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        notEmpty: true
-      }
     },
     hours_sat: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        notEmpty: true
-      }
     },
     hours_sun: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        notEmpty: true
-      }
     },
     phone: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        len: [0, 20]
-      }
     },
     website: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        isUrl: true
-      }
     },
     active: {
       type: DataTypes.BOOLEAN,
